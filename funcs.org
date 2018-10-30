@@ -1,0 +1,38 @@
+#+TITLE: funcs.el
+#+PROPERTY: header-args :tangle yes
+
+Custom functions to help do things in org.
+
+* Unique IDs
+
+When entries have unique IDs it enables better cross referencing between entries
+and links work even when entries are moved to different files.
+
+This function will add ids to each headline in the file that does not already have one.
+
+https://stackoverflow.com/a/16247032
+#+BEGIN_SRC elisp
+  (defun my/org-add-ids-to-headlines-in-file ()
+    "Add ID properties to all headlines in the current file which
+  do not already have one."
+    (interactive)
+    (org-map-entries 'org-id-get-create))
+#+END_SRC
+
+This function will remove an id from an entry and remove it from the global list
+https://emacs.stackexchange.com/a/30398
+#+BEGIN_SRC elisp
+  (defun my/org-id-remove-entry ()
+    "Remove/delete the ID entry and update the databases.
+  Update the `org-id-locations' global hash-table, and update the
+  `org-id-locations-file'.  `org-id-track-globally' must be `t`."
+    (interactive)
+    (save-excursion
+      (org-back-to-heading t)
+      (when (org-entry-delete (point) "ID")
+        (org-id-update-id-locations nil 'silent))))
+#+END_SRC
+
+Some other ideas that might be useful:
+
+https://writequit.org/articles/emacs-org-mode-generate-ids.html#automating-id-creation
