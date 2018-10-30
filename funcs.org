@@ -4,6 +4,9 @@
 Custom functions to help do things in org.
 
 * Unique IDs
+:PROPERTIES:
+:ID:       1cdf1b4f-be05-472c-bba8-151462f02bb6
+:END:
 
 When entries have unique IDs it enables better cross referencing between entries
 and links work even when entries are moved to different files.
