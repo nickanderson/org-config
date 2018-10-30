@@ -20,6 +20,9 @@
 - [[#eof][EOF]]
 
 * Encryption
+:PROPERTIES:
+:ID:       b4bded6c-9d3a-4570-9cc0-ae011226399b
+:END:
  
 GPG can be used to automatically encrypt sections of text tagged with /*crypt*/.
 
@@ -31,6 +34,9 @@ GPG can be used to automatically encrypt sections of text tagged with /*crypt*/.
 #+END_SRC
 
 * Spacemacs
+:PROPERTIES:
+:ID:       7d815734-bf0e-4620-89e6-910416ec7cc6
+:END:
 
 #+BEGIN_SRC elisp
   ;; BEGIN org niceities
@@ -50,6 +56,9 @@ GPG can be used to automatically encrypt sections of text tagged with /*crypt*/.
 #+END_SRC
 
 * Journal
+:PROPERTIES:
+:ID:       778fcfc3-5ca1-4af1-86a1-654c97260f3a
+:END:
 
 These need to be set earlier, like with the layer specification, for example:
 
@@ -70,6 +79,9 @@ These need to be set earlier, like with the layer specification, for example:
   #+END_SRC
   
 * ToDO Keywords
+:PROPERTIES:
+:ID:       9f7dc47a-843d-4d2d-8178-3053c57c30bf
+:END:
   
 #+BEGIN_SRC elisp
   ;; TODO Keywords
@@ -84,6 +96,9 @@ These need to be set earlier, like with the layer specification, for example:
 #+END_SRC
 
 * Link abbreviations
+:PROPERTIES:
+:ID:       83e904da-0e44-4629-942f-c3a390e227fb
+:END:
   
 #+BEGIN_SRC elisp
       ;; Link abbreviations http://orgmode.org/manual/Link-abbreviations.html#Link-abbreviations
@@ -103,6 +118,9 @@ These need to be set earlier, like with the layer specification, for example:
 #+END_SRC
 
 * Capture
+:PROPERTIES:
+:ID:       c6f828da-99c2-4354-80ef-9ab57c9f702d
+:END:
   
 #+BEGIN_SRC elisp
       ;; BEGIN Capture Templates
@@ -203,6 +221,9 @@ These need to be set earlier, like with the layer specification, for example:
 #+END_SRC
 
 * Babel (SRC blocks)
+:PROPERTIES:
+:ID:       01434efa-906d-4cde-893a-ce3ad19ceff2
+:END:
 
 I use SRC blocks a *lot*. 
 
@@ -247,7 +268,7 @@ Here we configure the languages supported by SRC blocks.
   ;;   )
 #+END_SRC
 
-#+BEGIN_SRC cfengine3 :exports both
+#+BEGIN_SRC cfengine3 :exports both :tangle no
   bundle agent main
   {
       reports:
@@ -259,6 +280,9 @@ Here we configure the languages supported by SRC blocks.
 : R: Hello world
 
 * Exporting
+:PROPERTIES:
+:ID:       fb4ea199-89f2-4cc7-ba97-0a296e72aec7
+:END:
   
 #+BEGIN_SRC elisp
   ;; BEGIN exports
@@ -275,6 +299,9 @@ Here we configure the languages supported by SRC blocks.
 #+END_SRC
 
 ** Publishing
+:PROPERTIES:
+:ID:       b87b7b21-cc07-4db3-b883-5fcfd194de57
+:END:
    
 #+BEGIN_SRC elisp
   ;; BEGIN Publishing
@@ -328,6 +355,9 @@ Here we configure the languages supported by SRC blocks.
 #+END_SRC
 
 * Agenda
+:PROPERTIES:
+:ID:       fbd97b7f-c136-4069-95d3-42f4804d0f85
+:END:
   
 #+BEGIN_SRC elisp
   (setq org-agenda-files
@@ -340,6 +370,9 @@ Here we configure the languages supported by SRC blocks.
 #+END_SRC
 
 * Clocking
+:PROPERTIES:
+:ID:       627db646-a768-4d75-a0dd-ac752133da47
+:END:
 #+BEGIN_SRC elisp
   ;; BEGIN clocking configuration
   (setq spaceline-org-clock-p t)
@@ -349,6 +382,9 @@ Here we configure the languages supported by SRC blocks.
 #+END_SRC
 
 * EOF
+:PROPERTIES:
+:ID:       db85d403-eff0-4059-b44c-fa77a94abd44
+:END:
 #+BEGIN_SRC elisp
   )
 #+END_SRC
