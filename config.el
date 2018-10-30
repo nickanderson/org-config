@@ -16,6 +16,8 @@
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
 (setq org-insert-heading-respect-content t)
+(setq org-id-link-to-org-use-id t)
+(setq org-id-track-globally t)
 ;; END org niceities
 
 (setq org-journal-dir "~/org/journal/")
@@ -34,9 +36,6 @@
 ;; This conflicts with the evil key bindings in spacemacs, instead of using the old speedcommands, use =, T T= when inside org mode.
 ;;(setq org-use-fast-todo-selection t)
 ;;(setq org-use-speed-commands t)
-
-(setq org-src-tab-acts-natively t)
-(setq org-src-fontify-natively t)
 
 ;; Link abbreviations http://orgmode.org/manual/Link-abbreviations.html#Link-abbreviations
 ;; This makes it easy to create links in org files to common urls
@@ -146,13 +145,17 @@ CREATED: %U
 
             ))
     ;; END Capture templates
+;; Use UUIDs to identify each speicifc entry
+(add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create)
 
-;; BEGIN SRC block execution
+(setq org-src-fontify-natively t)
+
+(setq org-src-tab-acts-natively t)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(
-   (shell . t)
+   (shell . t) ; Works for sh, shell, bash
    ;; (python . t)
    ;; (ruby . t)
    ;; (ditaa . t)
@@ -161,7 +164,8 @@ CREATED: %U
    ;; (perl . t))
    ))
 
-;; Not needed, handled by the cfengine layer
+;; This is no longer needed. It's handled by the cfengine layer automatically if
+;; it sees the org layer is also used.
 ;; https://github.com/syl20bnr/spacemacs/pull/11528
 ;; (when (configuration-layer/layer-usedp 'cfengine)
 ;;   ;;(require 'ob-cfengine3) ;; I have problems with capture templates if I don't
@@ -179,7 +183,6 @@ CREATED: %U
   (add-to-list 'org-export-backends 'jira))
 
 (when (configuration-layer/layer-usedp 'markdown)
-  ;(require 'ox-md)
   (add-to-list 'org-export-backends 'md))
 
 ;; END exports

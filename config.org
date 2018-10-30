@@ -44,6 +44,8 @@ GPG can be used to automatically encrypt sections of text tagged with /*crypt*/.
   (define-key global-map (kbd "C--") 'text-scale-decrease)
 
   (setq org-insert-heading-respect-content t)
+  (setq org-id-link-to-org-use-id t)
+  (setq org-id-track-globally t)
   ;; END org niceities
 #+END_SRC
 
@@ -196,6 +198,8 @@ These need to be set earlier, like with the layer specification, for example:
 
               ))
       ;; END Capture templates
+  ;; Use UUIDs to identify each speicifc entry
+  (add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create)
 #+END_SRC
 
 * Babel (SRC blocks)
