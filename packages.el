@@ -35,6 +35,7 @@
     ;; orgit
     ;; ox-gfm
     ox-jira
+    org-timeline
     )
   "The list of Lisp packages required by the org-config layer.
 
@@ -86,5 +87,12 @@ Each entry is either:
     ;; Some configuration goes here, however nothing relating to company
     ;; since this function may be called even if company is not installed!
     ))
+
+(defun org-config/init-org-timeline ()
+  (use-package org-timeline
+    ;; Some configuration goes here, however nothing relating to company
+    ;; since this function may be called even if company is not installed!
+    ))
+
 
 ;;; packages.el ends here
