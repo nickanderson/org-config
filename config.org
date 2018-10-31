@@ -388,7 +388,9 @@ Here we configure the languages supported by SRC blocks.
 
 * Downloading
 ** Pictures
-
+:PROPERTIES:
+:ID:       130cbfea-a505-4129-bbc9-97b88ff9ad2e
+:END:
 [[https://github.com/abo-abo/org-download][org-download]] is installed by the org layer, it makes getting images into your
 buffer from a URL or a screenshot easy. I like to use org-attach for storing the
 images. It stores them in a tree based on the entrys UUID.

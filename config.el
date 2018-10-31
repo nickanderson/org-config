@@ -9,7 +9,6 @@
 (setq org-tags-match-list-sublevels 'indented)
 (setq org-startup-indented t)
 (setq org-startup-with-inline-images t)
-(setq-default org-download-method 'attach)
 
 ;; Familiar zooming with Ctrl+ and Ctrl-
 (define-key global-map (kbd "C-+") 'text-scale-increase)
@@ -249,5 +248,8 @@ CREATED: %U
 (setq org-clock-idle-time 15)
 (setq org-time-clocksum-format (quote (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
 ;; END clocking configuration
+
+(setq org-download-method attach)
+(setq org-download-screenshot-method attach)
 
 )
