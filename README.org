@@ -1,41 +1,36 @@
 #+TITLE: org-config layer
-
-# The maximum height of the logo should be 200 pixels.
-[[img/org-config.png]]
+#+DOWNLOADED: https://upload.wikimedia.org/wikipedia/commons/a/a6/Org-mode-unicorn.svg @ 2018-10-30 20:48:44
+#+DOWNLOADED: https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Spacemacs_logo.svg/120px-Spacemacs_logo.svg.png @ 2018-10-30 20:51:04
+[[./data/71/488fc1-e0a8-4522-9748-ee905cd15d63/Org-mode-unicorn_2018-10-30_20-48-44.svg]][[./data/71/488fc1-e0a8-4522-9748-ee905cd15d63/120px-Spacemacs_logo.svg_2018-10-30_20-51-02.png]]
 
 # TOC links should be GitHub style anchors.
-* Table of Contents                                        :TOC_4_gh:noexport:
+* Table of Contents                                        :TOC_4_gh:noexport:ATTACH:
+:PROPERTIES:
+:ID:       71488fc1-e0a8-4522-9748-ee905cd15d63
+:Attachments: Org-mode-unicorn_2018-10-30_20-48-44.svg 120px-Spacemacs_logo.svg_2018-10-30_20-51-02.png
+:END:
 - [[#description][Description]]
-  - [[#features][Features:]]
 - [[#install][Install]]
-- [[#key-bindings][Key bindings]]
 
 * Description
-This layer adds support for something.
+This layer handles configuration of org-mode, the way I lke it.
 
-** Features:
-  - Encryption
-  - Link Abbreviations
-  - Capture
-  - Babel (SRC blocks)
-  - Exporting
-    - Publishing
-  - Agenda
-  - Clocking
+*Features:*
+- Encryption
+- Link Abbreviations
+- Capture
+- Babel (SRC blocks)
+- Exporting
+  - Publishing
+- Agenda
+- Clocking
+- Presentations
+
+For details see [[./config.org][config]], [[./funcs.org][functions]], and [[./packages.org][packages]] (that aren't already installed
+by org or another layer.
 
 * Install
 To use this configuration layer, add it to your =~/.spacemacs=. You will need to
 add =org-config= to the existing =dotspacemacs-configuration-layers= list in this
 file.
 
-* Key bindings
-
-| Key Binding | Description    |
-|-------------+----------------|
-| ~SPC x x x~ | Does thing01   |
-
-# Use GitHub URLs if you wish to link a Spacemacs documentation file or its heading.
-# Examples:
-# [[https://github.com/syl20bnr/spacemacs/blob/master/doc/VIMUSERS.org#sessions]]
-# [[https://github.com/syl20bnr/spacemacs/blob/master/layers/%2Bfun/emoji/README.org][Link to Emoji layer README.org]]
-# If space-doc-mode is enabled, Spacemacs will open a local copy of the linked file.
