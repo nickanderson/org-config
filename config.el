@@ -249,7 +249,7 @@ CREATED: %U
 (setq org-time-clocksum-format (quote (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
 ;; END clocking configuration
 
-(setq org-download-method attach)
-(setq org-download-screenshot-method attach)
+(setq org-download-method 'attach)
+(setq org-download-screenshot-method 'attach)
 
 )

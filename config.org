@@ -399,8 +399,8 @@ Use ~org-download-yank~ to grab an image, and ~org-download-screenshot~ to take
 a screenshot.
 
 #+BEGIN_SRC elisp
-  (setq org-download-method attach)
-  (setq org-download-screenshot-method attach)
+  (setq org-download-method 'attach)
+  (setq org-download-screenshot-method 'attach)
 #+END_SRC
 
 * EOF
