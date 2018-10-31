@@ -7,7 +7,7 @@
 
 * Table of Contents :TOC_4_gh:
 - [[#encryption][Encryption]]
-- [[#spacemacs][Spacemacs]]
+- [[#look-and-feel][Look and feel]]
 - [[#journal][Journal]]
 - [[#keywords][Keywords]]
 - [[#link-abbreviations][Link abbreviations]]
@@ -36,7 +36,7 @@ GPG can be used to automatically encrypt sections of text tagged with /*crypt*/.
   (setq org-crypt-key "9274E588E866A10B713C9CCD9EB3AD425D1CCC11")
 #+END_SRC
 
-* Spacemacs
+* Look and feel
 :PROPERTIES:
 :ID:       7d815734-bf0e-4620-89e6-910416ec7cc6
 :END:
