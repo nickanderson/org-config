@@ -19,6 +19,7 @@
 - [[#clocking][Clocking]]
 - [[#downloading][Downloading]]
   - [[#pictures][Pictures]]
+- [[#for-the-future][For the future]]
 - [[#eof][EOF]]
 
 * Encryption
@@ -69,15 +70,15 @@ These need to be set earlier, like with the layer specification, for example:
     org-enable-org-journal-support t)
 #+END_SRC 
 
-  #+BEGIN_SRC elisp
-    (setq org-journal-dir "~/org/journal/")
-    (setq org-journal-file-format "%Y-%m-%d")
-    (setq org-journal-date-prefix "#+TITLE: ")
-    (setq org-journal-date-format "%A, %B %d %Y")
-    (setq org-journal-time-prefix "* ")
-    (setq org-journal-time-format "")
-    (setq org-want-todo-bindings t)
-  #+END_SRC
+#+BEGIN_SRC elisp
+  (setq org-journal-dir "~/org/journal/")
+  (setq org-journal-file-format "%Y-%m-%d")
+  (setq org-journal-date-prefix "#+TITLE: ")
+  (setq org-journal-date-format "%A, %B %d %Y")
+  (setq org-journal-time-prefix "* ")
+  (setq org-journal-time-format "")
+  (setq org-want-todo-bindings t)
+#+END_SRC
   
 * ToDO Keywords
 :PROPERTIES:
@@ -359,9 +360,10 @@ Here we configure the languages supported by SRC blocks.
   ;; BEGIN org-agenda configuration
 #+END_SRC
 
-* Agenda
+* Agenda :ATTACH:
 :PROPERTIES:
 :ID:       fbd97b7f-c136-4069-95d3-42f4804d0f85
+:Attachments: 2018-10-22-05-30_2018-10-30_22-08-02.png
 :END:
   
 #+BEGIN_SRC elisp
@@ -372,6 +374,19 @@ Here we configure the languages supported by SRC blocks.
   (setq org-agenda-dim-blocked-tasks nil)
   (setq org-agenda-prefix-format '"%b")
   ;; END org-agenda configuration
+#+END_SRC
+
+=org-timeline= shows a visualization of time spent throughout the day. For
+example, here I see that I worked from 11:45-3 wihtout breaking
+
+#+DOWNLOADED: file:///home/nickanderson/Pictures/Screenshots/2018-10-22-05-30.png @ 2018-10-30 22:08:02
+[[file:data/fb/d97b7f-c136-4069-95d3-42f4804d0f85/2018-10-22-05-30_2018-10-30_22-08-02.png]]
+
+#+BEGIN_SRC elisp
+  (when (configuration-layer/package-used-p 'org-timeline)
+    (require 'org-timeline)
+    (add-hook 'org-agenda-finalize-hook 'org-timeline-insert-timeline :append)
+    )
 #+END_SRC
 
 * Clocking
@@ -400,8 +415,17 @@ a screenshot.
 
 #+BEGIN_SRC elisp
   (setq org-download-method 'attach)
-  (setq org-download-screenshot-method 'attach)
 #+END_SRC
+
+* For the future
+- org-board :: Archive webpages
+
+- org-clock-conveniance :: Functions to help manage clock times. Currently I
+     clock automatically, and I don't fret too much about accuracy. But if I
+     want to improve my clocking, this may be useful for ammending mistakes.
+
+- org-gcal :: For integrating google calendar into org-mode, perhaps when I get
+              better with agenda.
 
 * EOF
 :PROPERTIES:

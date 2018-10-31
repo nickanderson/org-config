@@ -243,6 +243,11 @@ CREATED: %U
 (setq org-agenda-prefix-format '"%b")
 ;; END org-agenda configuration
 
+(when (configuration-layer/package-used-p 'org-timeline)
+  (require 'org-timeline)
+  (add-hook 'org-agenda-finalize-hook 'org-timeline-insert-timeline :append)
+  )
+
 ;; BEGIN clocking configuration
 (setq spaceline-org-clock-p t)
 (setq org-clock-idle-time 15)

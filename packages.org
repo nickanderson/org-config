@@ -39,6 +39,7 @@
       ;; orgit
       ;; ox-gfm
       ox-jira
+      org-timeline
       )
     "The list of Lisp packages required by the org-config layer.
 
