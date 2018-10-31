@@ -365,7 +365,26 @@ Here we configure the languages supported by SRC blocks.
 :ID:       fbd97b7f-c136-4069-95d3-42f4804d0f85
 :Attachments: 2018-10-22-05-30_2018-10-30_22-08-02.png
 :END:
-  
+I have been trying to learn the agenda for some time now, I just haven't been
+able to make it stick in my workflow. I take notes in org for most things that I
+am doing, and my working set of org files is about 20M.
+
+#+BEGIN_SRC shell
+  find ~/org -type f -name '*.org' -exec du -ch {} + | grep total$
+  find ~/org -type f -name '*.org_archive' -exec du -ch {} + | grep total$
+#+END_SRC
+
+#+RESULTS:
+| 13M  | total |
+| 4.3M | total |
+
+This helps me to both focus on todays stuff, and to reduce the time to build the
+agenda.
+
+#+BEGIN_SRC elisp
+ (setq org-agenda-span 'day)
+#+END_SRC
+
 #+BEGIN_SRC elisp
   (setq org-agenda-files
         '("~/org" "~/org/cfengine" "~/org/cfengine/customers" "~/.org-jira"))
@@ -377,7 +396,7 @@ Here we configure the languages supported by SRC blocks.
 #+END_SRC
 
 =org-timeline= shows a visualization of time spent throughout the day. For
-example, here I see that I worked from 11:45-3 wihtout breaking
+example, here I see that I worked from 11:45-3:00 of non-stopped clocked time.
 
 #+DOWNLOADED: file:///home/nickanderson/Pictures/Screenshots/2018-10-22-05-30.png @ 2018-10-30 22:08:02
 [[file:data/fb/d97b7f-c136-4069-95d3-42f4804d0f85/2018-10-22-05-30_2018-10-30_22-08-02.png]]

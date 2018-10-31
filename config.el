@@ -235,6 +235,8 @@ CREATED: %U
 ;; END Publishing
 ;; BEGIN org-agenda configuration
 
+(setq org-agenda-span 'day)
+
 (setq org-agenda-files
       '("~/org" "~/org/cfengine" "~/org/cfengine/customers" "~/.org-jira"))
 ;; It's hard to see them (at least with the default color). Also this is a
@@ -255,6 +257,5 @@ CREATED: %U
 ;; END clocking configuration
 
 (setq org-download-method 'attach)
-(setq org-download-screenshot-method 'attach)
 
 )
