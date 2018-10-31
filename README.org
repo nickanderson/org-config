@@ -27,7 +27,7 @@ This layer handles configuration of org-mode, the way I lke it.
 - Presentations
 
 For details see [[./config.org][config]], [[./funcs.org][functions]], and [[./packages.org][packages]] (that aren't already installed
-by org or another layer.
+by org or another layer).
 
 * Install
 To use this configuration layer, add it to your =~/.spacemacs=. You will need to

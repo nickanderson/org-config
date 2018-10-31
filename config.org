@@ -17,6 +17,8 @@
   - [[#publishing][Publishing]]
 - [[#agenda][Agenda]]
 - [[#clocking][Clocking]]
+- [[#downloading][Downloading]]
+  - [[#pictures][Pictures]]
 - [[#eof][EOF]]
 
 * Encryption
@@ -43,7 +45,6 @@ GPG can be used to automatically encrypt sections of text tagged with /*crypt*/.
   (setq org-tags-match-list-sublevels 'indented)
   (setq org-startup-indented t)
   (setq org-startup-with-inline-images t)
-  (setq-default org-download-method 'attach)
 
   ;; Familiar zooming with Ctrl+ and Ctrl-
   (define-key global-map (kbd "C-+") 'text-scale-increase)
@@ -220,14 +221,18 @@ These need to be set earlier, like with the layer specification, for example:
   (add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create)
 #+END_SRC
 
-* Babel (SRC blocks)
+* Babel (SRC blocks) :ATTACH:
 :PROPERTIES:
 :ID:       01434efa-906d-4cde-893a-ce3ad19ceff2
+:Attachments: screenshot_2018-10-30_20-56-48.png
 :END:
 
 I use SRC blocks a *lot*. 
 
 =org-src-fontify-natively= makes syntax highlighting work within SRC blocks.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2018-10-30 20:56:48
+[[file:data/01/434efa-906d-4cde-893a-ce3ad19ceff2/screenshot_2018-10-30_20-56-48.png]]
 
 #+BEGIN_SRC elisp
   (setq org-src-fontify-natively t)
@@ -379,6 +384,21 @@ Here we configure the languages supported by SRC blocks.
   (setq org-clock-idle-time 15)
   (setq org-time-clocksum-format (quote (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
   ;; END clocking configuration
+#+END_SRC
+
+* Downloading
+** Pictures
+
+[[https://github.com/abo-abo/org-download][org-download]] is installed by the org layer, it makes getting images into your
+buffer from a URL or a screenshot easy. I like to use org-attach for storing the
+images. It stores them in a tree based on the entrys UUID.
+
+Use ~org-download-yank~ to grab an image, and ~org-download-screenshot~ to take
+a screenshot.
+
+#+BEGIN_SRC elisp
+  (setq org-download-method attach)
+  (setq org-download-screenshot-method attach)
 #+END_SRC
 
 * EOF
