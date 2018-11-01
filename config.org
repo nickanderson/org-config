@@ -123,7 +123,88 @@ These need to be set earlier, like with the layer specification, for example:
 :PROPERTIES:
 :ID:       c6f828da-99c2-4354-80ef-9ab57c9f702d
 :END:
-  
+I use capture templates to help me get information for common things in a
+consistent way. I have capture templates for various types of meetings, and
+different types of tasks that I work on.
+
+** Templates
+Tempalates can be external, probably it would be a good idea to try moving to
+external template files instead of having huge templates in elisp. [[https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/duqzj0r/][This post
+from reddit.com/emacs]] shows an example using external templates
+
+*** Generic Meeting
+:PROPERTIES:
+:ID:       4b0d8c14-b69a-4956-8874-10b3d7641c99
+:END:
+#+BEGIN_SRC elisp
+  (defvar my/org-meeting-template-generic "* %u %^{Meeting about} %^g
+  CREATED: %U
+
+  %?
+
+  ,** Notes
+
+
+  " "Meeting Template - Generic")
+#+END_SRC
+
+*** CFEngine Customer Status Check-in
+:PROPERTIES:
+:ID:       6dcf9681-425f-4bdc-8ded-c72f3ada392d
+:END:
+#+BEGIN_SRC elisp
+  (defvar my/org-meeting-template-customer-status "* %u Status Check-in
+  %^{CUSTOMER}pCREATED: %U
+
+  %?
+
+  ,*Attendees:*
+    - Nick Anderson
+    -
+
+  ,** Info
+  - Current versions running:
+  - Next planned upgrade:
+  - Upcoming platform changes:
+
+  ,** Notes
+
+  " "Meeting Template - Customer Status Check-in")
+#+END_SRC
+
+*** CFEngine Backlog Grooming
+:PROPERTIES:
+:ID:       5f77724f-afa8-47bc-a858-32396a37472c
+:END:
+
+Bi-weekly meeting to make sure we are ready to work on our planned tasks.
+
+*Agenda:*
+
+- [[https://tracker.mender.io/issues/?filter=11300][Review New customer issues]]
+- [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=34][Review Progress on CFEngine Epics]]
+- [[https://tracker.mender.io/issues/?filter=11205][Review Understanding of Next Bugs]]
+- [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=11&view=planning&epics=visible][Review CFEngine PM Backlog]]
+
+#+BEGIN_SRC elisp
+  (defvar my/org-meeting-template-grooming "* %u Meeting About CFEngine Grooming :internal_meeting:
+  CREATED: %U
+  %?
+  ,*Agenda:*
+  - [[https://tracker.mender.io/issues/?filter=11300][Review New customer issues]]
+  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=34][Review Progress on CFEngine Epics]]
+  - [[https://tracker.mender.io/issues/?filter=11205][Review Understanding of Next Bugs]]
+  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=11&view=planning&epics=visible][Review CFEngine PM Backlog]]
+
+  ,** Notes
+
+  " "Meeting Template - Grooming")
+#+END_SRC
+
+*** Unorganized
+:PROPERTIES:
+:ID:       78db44bb-8de4-4da9-bb90-fd6e235f1e26
+:END:
 #+BEGIN_SRC elisp
       ;; BEGIN Capture Templates
       ;; I picked up this neat trick from the Venerable Sacha Chua
@@ -144,6 +225,7 @@ These need to be set earlier, like with the layer specification, for example:
   CREATED: %U
 
   ,** Aleksei
+  ,** Igor
   ,** Ole
   ,** Vratislav
   ,** Nils 
@@ -185,44 +267,59 @@ These need to be set earlier, like with the layer specification, for example:
 
       (defvar my/org-daily-review-capture-template "* %u\n\n%?\n")
 
-      ;; Configure custom capture templates
-      (setq org-capture-templates
-            `(;; Note the backtick here, it's required so that the defvar based tempaltes will work!
-              ;;http://comments.gmane.org/gmane.emacs.orgmode/106890
+#+END_SRC
+** Configure Capture
+:PROPERTIES:
+:ID:       8bbfa3e2-4ad1-4cb5-ac24-9c2deeef5f37
+:END:
 
-              ("t" "To-do" entry (file+headline "~/org/refile.org" "Tasks")
-               "** TODO %^{Task Description}\nCreated From: %a\n%?\n\n" :clock-in t :clock-resume t :append t)
+I clock my time so that it's easier for me to look back and see what I was
+working on, so I have all of my capture templates clock in during capture, and
+then resume the clock for whatever was being clocked before the capture.
 
-              ("s" "Support" entry (file+headline "~/org/refile.org" "Tasks")
-               ,my/org-capture-support :clock-in t :clock-resume t)
+#+BEGIN_SRC elisp
+  ;; Configure custom capture templates
+  (setq org-capture-templates
+        `(;; Note the backtick here, it's required so that the defvar based tempaltes will work!
+          ;;http://comments.gmane.org/gmane.emacs.orgmode/106890
 
-              ("j" "Jira" entry (file+headline "~/org/refile.org" "Tasks")
-               ,my/org-capture-jira :clock-in t :clock-resume t)
+          ("t" "To-do" entry (file+headline "~/org/refile.org" "Tasks")
+           "** TODO %^{Task Description}\nCreated From: %a\n%?\n\n" :clock-in t :clock-resume t :append t)
 
-              ("w" "Web site" entry
-               (file "~/org/websites.org")
-               "* %a :website:\n\n%U %?\n\n%:initial")
+          ("s" "Support" entry (file+headline "~/org/refile.org" "Tasks")
+           ,my/org-capture-support :clock-in t :clock-resume t :append t)
 
-              ("r" "Respond to Email" entry (file+headline "~/org/refile.org" "Tasks")
-               ,my/org-respond-email-capture-template :clock-in t :clock-resume t)
+          ("j" "Jira" entry (file+headline "~/org/refile.org" "Tasks")
+           ,my/org-capture-jira :clock-in t :clock-resume t :append t)
 
-              ("c" "Contact" entry (file "~/org/x-files.org") ,my/org-contact-capture-template)
-              ("d" "Daily Review" entry (file "~/org/daily_reviews.org") ,my/org-daily-review-capture-template :clock-in t :clock-resume t)
+          ("w" "Web site" entry
+           (file "~/org/websites.org")
+           "* %a :website:\n\n%U %?\n\n%:initial" :append t)
 
-              ;;("m" "Meetings" entry (file "~/org/cfengine/meetings.org" )
-              ("m" "Meetings" )
-              ("ms" "Meeting - Standup" entry (file "~/org/cfengine/meetings.org" )
-               ,my/org-meeting-template-standup :append t :clock-in t :clock-resume t)
-              ("mp" "Meeting - Planning/Review" entry (file "~/org/cfengine/meetings.org" )
-               ,my/org-meeting-template-planning :append t :clock-in t :clock-resume t)
+          ("r" "Respond to Email" entry (file+headline "~/org/refile.org" "Tasks")
+           ,my/org-respond-email-capture-template :clock-in t :clock-resume t :append t)
 
-              ))
-      ;; END Capture templates
+          ("c" "Contact" entry (file "~/org/x-files.org") ,my/org-contact-capture-template :append t)
+          ("d" "Daily Review" entry (file "~/org/daily_reviews.org") ,my/org-daily-review-capture-template :clock-in t :clock-resume t :append t)
+
+          ("m" "Meetings" )
+          ("ms" "Meeting - Standup" entry (file "~/org/cfengine/meetings.org" )
+           ,my/org-meeting-template-standup :clock-in t :clock-resume t :append t :empty-lines-after 1)
+          ("mc" "Meeting - Customer Status Check-in" entry (file "~/org/cfengine/meetings.org" )
+           ,my/org-meeting-template-customer-status :clock-in t :clock-resume t :append t :empty-lines-after 1)
+          ("mg" "Meeting - Grooming" entry (file "~/org/cfengine/meetings.org" )
+           ,my/org-meeting-template-grooming :clock-in t :clock-resume t :append t :empty-lines-after 1)
+          ("mp" "Meeting - Planning/Review" entry (file "~/org/cfengine/meetings.org" )
+           ,my/org-meeting-template-planning :clock-in t :clock-resume t :append t :empty-lines-after 1)
+          ("mm" "Meeting - Generic" entry (file "~/org/cfengine/meetings.org" )
+           ,my/org-meeting-template-generic :clock-in t :clock-resume t :append t :empty-lines-after 1)
+          ))
+  ;; END Capture templates
   ;; Use UUIDs to identify each speicifc entry
   (add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create)
 #+END_SRC
 
-* Babel (SRC blocks) :ATTACH:
+* Babel (SRC blocks)                                                 :ATTACH:
 :PROPERTIES:
 :ID:       01434efa-906d-4cde-893a-ce3ad19ceff2
 :Attachments: screenshot_2018-10-30_20-56-48.png
