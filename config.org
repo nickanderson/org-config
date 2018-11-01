@@ -532,6 +532,17 @@ a screenshot.
 #+BEGIN_SRC elisp
   (setq org-download-method 'attach)
 #+END_SRC
+* Jira
+:PROPERTIES:
+:ID:       acaa5143-4727-4511-b345-5a8dbbd44862
+:END:
+
+#+BEGIN_SRC elisp
+  (when (configuration-layer/package-usedp 'org-jira)
+    (org-jira :variables
+              jiralib-url "https://tracker.mender.io:443"
+              org-jira-working-dir "~/.org-jira"))
+#+END_SRC
 
 * For the future
 - org-board :: Archive webpages
