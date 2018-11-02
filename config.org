@@ -577,14 +577,11 @@ a screenshot.
 :ID:       acaa5143-4727-4511-b345-5a8dbbd44862
 :END:
 
-#+BEGIN_SRC elisp :tangle no
+#+BEGIN_SRC elisp
   (when (configuration-layer/package-used-p 'org-jira)
              (setq jiralib-url "https://tracker.mender.io:443")
               (setq org-jira-working-dir "~/.org-jira"))
 #+END_SRC
-
-#+RESULTS:
-: ~/.org-jira
 
 * For the future
 - org-board :: Archive webpages

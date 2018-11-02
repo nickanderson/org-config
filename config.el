@@ -310,4 +310,8 @@ CREATED: %U
 
 (setq org-download-method 'attach)
 
+(when (configuration-layer/package-used-p 'org-jira)
+           (setq jiralib-url "https://tracker.mender.io:443")
+            (setq org-jira-working-dir "~/.org-jira"))
+
 )
