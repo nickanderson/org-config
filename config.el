@@ -6,6 +6,8 @@
 (setq org-crypt-key "9274E588E866A10B713C9CCD9EB3AD425D1CCC11")
 
 ;; BEGIN org niceities
+;; NOT WORKING!
+(setq-default dotspacemacs-large-file-size 3)
 (setq org-tags-match-list-sublevels 'indented)
 (setq org-startup-indented t)
 (setq org-startup-with-inline-images t)
@@ -17,6 +19,10 @@
 (setq org-insert-heading-respect-content t)
 (setq org-id-link-to-org-use-id t)
 (setq org-id-track-globally t)
+
+;; TODO Move this out from the org-layer, it's not org-specific.
+;; Or make it specific to my org-files somehow https://emacs.stackexchange.com/a/3611
+(setq global-auto-revert-mode t)
 ;; END org niceities
 
 (setq org-journal-dir "~/org/journal/")

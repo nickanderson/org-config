@@ -7,6 +7,7 @@
 
 * Table of Contents :TOC_4_gh:
 - [[#encryption][Encryption]]
+  - [[#for-example][For example]]
 - [[#look-and-feel][Look and feel]]
 - [[#journal][Journal]]
 - [[#keywords][Keywords]]
@@ -69,6 +70,8 @@ tJOSK/O5zYB2p4vGLcelSWN1+kkMgsgDwPv9
 
 #+BEGIN_SRC elisp
   ;; BEGIN org niceities
+  ;; NOT WORKING!
+  (setq-default dotspacemacs-large-file-size 3)
   (setq org-tags-match-list-sublevels 'indented)
   (setq org-startup-indented t)
   (setq org-startup-with-inline-images t)
@@ -80,6 +83,10 @@ tJOSK/O5zYB2p4vGLcelSWN1+kkMgsgDwPv9
   (setq org-insert-heading-respect-content t)
   (setq org-id-link-to-org-use-id t)
   (setq org-id-track-globally t)
+
+  ;; TODO Move this out from the org-layer, it's not org-specific.
+  ;; Or make it specific to my org-files somehow https://emacs.stackexchange.com/a/3611
+  (setq global-auto-revert-mode t)
   ;; END org niceities
 #+END_SRC
 
@@ -570,12 +577,14 @@ a screenshot.
 :ID:       acaa5143-4727-4511-b345-5a8dbbd44862
 :END:
 
-#+BEGIN_SRC elisp
-  (when (configuration-layer/package-usedp 'org-jira)
-    (org-jira :variables
-              jiralib-url "https://tracker.mender.io:443"
-              org-jira-working-dir "~/.org-jira"))
+#+BEGIN_SRC elisp :tangle no
+  (when (configuration-layer/package-used-p 'org-jira)
+             (setq jiralib-url "https://tracker.mender.io:443")
+              (setq org-jira-working-dir "~/.org-jira"))
 #+END_SRC
+
+#+RESULTS:
+: ~/.org-jira
 
 * For the future
 - org-board :: Archive webpages
