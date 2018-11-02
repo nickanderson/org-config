@@ -145,14 +145,21 @@ These need to be set earlier, like with the layer specification, for example:
               ("jira" . "https://tracker.mender.io/browse/")))
 #+END_SRC
 
-* Capture
+* Capture :ATTACH:
 :PROPERTIES:
 :ID:       c6f828da-99c2-4354-80ef-9ab57c9f702d
+:Attachments: 2018-11-13-26-27_2018-11-02_13-27-56.png 2018-11-13-26-50_2018-11-02_13-28-14.png
 :END:
 I use capture templates to help me get information for common things in a
 consistent way. I have capture templates for various types of meetings, and
 different types of tasks that I work on.
 
+#+DOWNLOADED: file:///home/nickanderson/Pictures/Screenshots/2018-11-13-26-27.png @ 2018-11-02 13:27:56
+[[file:data/c6/f828da-99c2-4354-80ef-9ab57c9f702d/2018-11-13-26-27_2018-11-02_13-27-56.png]]
+
+
+#+DOWNLOADED: file:///home/nickanderson/Pictures/Screenshots/2018-11-13-26-50.png @ 2018-11-02 13:28:14
+[[file:data/c6/f828da-99c2-4354-80ef-9ab57c9f702d/2018-11-13-26-50_2018-11-02_13-28-14.png]]
 ** Templates
 Tempalates can be external, probably it would be a good idea to try moving to
 external template files instead of having huge templates in elisp. [[https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/duqzj0r/][This post
