@@ -43,6 +43,25 @@ GPG can be used to automatically encrypt sections of text tagged with /*crypt*/.
   (setq org-crypt-key "9274E588E866A10B713C9CCD9EB3AD425D1CCC11")
 #+END_SRC
 
+** For example  :crypt:
+-----BEGIN PGP MESSAGE-----
+
+hQIMA/jYNcPWXvJ6AQ/+ItpAIG1h5g31OxHivWHoEBnnKpOILl9bvbtv+rjxtRFL
+aJxKFK6SL7iKdFogKyzU5EpS9qF9aRSH9eEivaiCcF8uYIbDQkU1EW5vadcUbpx5
+oKm2JNy4QYy/Yj5709+gxO+zIITXN4Mo5CuXF9OKLp0euuwLm2bZkYrvjhryGLqe
+lS3+bovvzX9VKdYYE5Bdulq5aTuVspOwpUhWcEJSql+Ittry9stpbeUa654ikEEn
+UR5RVreZujYLQ4s0/+A1/kGAdp+3U+roef9FCcAH75eFkvw7OsLcw7YPyviCdPs0
+lroZAYDfxYV0332Ak2nj+cMxdwm/lRPXQfqWJ+XJUxQadwaLjbsrqShZBOjjf3eP
+6fXQHauLn0twJ1jAR5RePE+AqxHiY3b4Revfs+FwnBal5N+fiV5QaVSnEpbhGoWk
+UrMKbm1yz0PP2vnm72j0nhZzf5uaT2MRItL2Fb2hDJexUaO745WqP69uk9kpdxm7
+RHM/KDO1/g1gFt6XXDlFo+XzeaByhP6mEhbna3tk13660UR03CKRieYew4K3bJHJ
+XUerJJ9O+mRwq1x/Fd22FUEs8ZOzuRHLWlRjfl9aNN7AK5UGCxANV3SEkc/I+HgM
+vhdT3bWoYIjMQQCAFXMkLhXxzZKCr9W6iOWhIskKuFbyckxlmuC2KmeiP2tpO7/S
+SgE1eqBxX6fpIM0Pzp2e5/XqB9tW6QxKavgBsCGu521UqS+XQTfX9K/Z0cFnpVsW
+tJOSK/O5zYB2p4vGLcelSWN1+kkMgsgDwPv9
+=AGgn
+-----END PGP MESSAGE-----
+
 * Look and feel
 :PROPERTIES:
 :ID:       7d815734-bf0e-4620-89e6-910416ec7cc6
