@@ -51,6 +51,47 @@
         ("mpf-commit" . "https://github.com/cfengine/masterfiles/commit/")
         ("jira" . "https://tracker.mender.io/browse/")))
 
+(defvar my/org-meeting-template-generic "* %u %^{Meeting about} %^g
+CREATED: %U
+
+%?
+
+** Notes
+
+
+" "Meeting Template - Generic")
+
+(defvar my/org-meeting-template-customer-status "* %u Status Check-in
+%^{CUSTOMER}pCREATED: %U
+
+%?
+
+*Attendees:*
+  - Nick Anderson
+  -
+
+** Info
+- Current versions running:
+- Next planned upgrade:
+- Upcoming platform changes:
+
+** Notes
+
+" "Meeting Template - Customer Status Check-in")
+
+(defvar my/org-meeting-template-grooming "* %u Meeting About CFEngine Grooming :internal_meeting:
+CREATED: %U
+%?
+*Agenda:*
+- [[https://tracker.mender.io/issues/?filter=11300][Review New customer issues]]
+- [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=34][Review Progress on CFEngine Epics]]
+- [[https://tracker.mender.io/issues/?filter=11205][Review Understanding of Next Bugs]]
+- [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=11&view=planning&epics=visible][Review CFEngine PM Backlog]]
+
+** Notes
+
+" "Meeting Template - Grooming")
+
 ;; BEGIN Capture Templates
     ;; I picked up this neat trick from the Venerable Sacha Chua
     (defvar my/org-meeting-template-planning "* %u Meeting About CFEngine Planning   %^G
@@ -70,6 +111,7 @@ CREATED: %U
 CREATED: %U
 
 ** Aleksei
+** Igor
 ** Ole
 ** Vratislav
 ** Nils 
@@ -111,39 +153,43 @@ CREATED: %U
 
     (defvar my/org-daily-review-capture-template "* %u\n\n%?\n")
 
-    ;; Configure custom capture templates
-    (setq org-capture-templates
-          `(;; Note the backtick here, it's required so that the defvar based tempaltes will work!
-            ;;http://comments.gmane.org/gmane.emacs.orgmode/106890
+;; Configure custom capture templates
+(setq org-capture-templates
+      `(;; Note the backtick here, it's required so that the defvar based tempaltes will work!
+        ;;http://comments.gmane.org/gmane.emacs.orgmode/106890
 
-            ("t" "To-do" entry (file+headline "~/org/refile.org" "Tasks")
-             "** TODO %^{Task Description}\nCreated From: %a\n%?\n\n" :clock-in t :clock-resume t :append t)
+        ("t" "To-do" entry (file+headline "~/org/refile.org" "Tasks")
+         "** TODO %^{Task Description}\nCreated From: %a\n%?\n\n" :clock-in t :clock-resume t :append t)
 
-            ("s" "Support" entry (file+headline "~/org/refile.org" "Tasks")
-             ,my/org-capture-support :clock-in t :clock-resume t)
+        ("s" "Support" entry (file+headline "~/org/refile.org" "Tasks")
+         ,my/org-capture-support :clock-in t :clock-resume t :append t)
 
-            ("j" "Jira" entry (file+headline "~/org/refile.org" "Tasks")
-             ,my/org-capture-jira :clock-in t :clock-resume t)
+        ("j" "Jira" entry (file+headline "~/org/refile.org" "Tasks")
+         ,my/org-capture-jira :clock-in t :clock-resume t :append t)
 
-            ("w" "Web site" entry
-             (file "~/org/websites.org")
-             "* %a :website:\n\n%U %?\n\n%:initial")
+        ("w" "Web site" entry
+         (file "~/org/websites.org")
+         "* %a :website:\n\n%U %?\n\n%:initial" :append t)
 
-            ("r" "Respond to Email" entry (file+headline "~/org/refile.org" "Tasks")
-             ,my/org-respond-email-capture-template :clock-in t :clock-resume t)
+        ("r" "Respond to Email" entry (file+headline "~/org/refile.org" "Tasks")
+         ,my/org-respond-email-capture-template :clock-in t :clock-resume t :append t)
 
-            ("c" "Contact" entry (file "~/org/x-files.org") ,my/org-contact-capture-template)
-            ("d" "Daily Review" entry (file "~/org/daily_reviews.org") ,my/org-daily-review-capture-template :clock-in t :clock-resume t)
+        ("c" "Contact" entry (file "~/org/x-files.org") ,my/org-contact-capture-template :append t)
+        ("d" "Daily Review" entry (file "~/org/daily_reviews.org") ,my/org-daily-review-capture-template :clock-in t :clock-resume t :append t)
 
-            ;;("m" "Meetings" entry (file "~/org/cfengine/meetings.org" )
-            ("m" "Meetings" )
-            ("ms" "Meeting - Standup" entry (file "~/org/cfengine/meetings.org" )
-             ,my/org-meeting-template-standup :append t :clock-in t :clock-resume t)
-            ("mp" "Meeting - Planning/Review" entry (file "~/org/cfengine/meetings.org" )
-             ,my/org-meeting-template-planning :append t :clock-in t :clock-resume t)
-
-            ))
-    ;; END Capture templates
+        ("m" "Meetings" )
+        ("ms" "Meeting - Standup" entry (file "~/org/cfengine/meetings.org" )
+         ,my/org-meeting-template-standup :clock-in t :clock-resume t :append t :empty-lines-after 1)
+        ("mc" "Meeting - Customer Status Check-in" entry (file "~/org/cfengine/meetings.org" )
+         ,my/org-meeting-template-customer-status :clock-in t :clock-resume t :append t :empty-lines-after 1)
+        ("mg" "Meeting - Grooming" entry (file "~/org/cfengine/meetings.org" )
+         ,my/org-meeting-template-grooming :clock-in t :clock-resume t :append t :empty-lines-after 1)
+        ("mp" "Meeting - Planning/Review" entry (file "~/org/cfengine/meetings.org" )
+         ,my/org-meeting-template-planning :clock-in t :clock-resume t :append t :empty-lines-after 1)
+        ("mm" "Meeting - Generic" entry (file "~/org/cfengine/meetings.org" )
+         ,my/org-meeting-template-generic :clock-in t :clock-resume t :append t :empty-lines-after 1)
+        ))
+;; END Capture templates
 ;; Use UUIDs to identify each speicifc entry
 (add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create)
 
