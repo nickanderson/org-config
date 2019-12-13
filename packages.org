@@ -36,15 +36,17 @@
     (defconst org-config-packages
       '(
         ob-async
-        ox-jira
+        ;; Part of org layer as of 2019-06-28
+        ;;ox-jira
         org-timeline
-        org-jira
 
-        (org-jira
-         :location (recipe
-                    :fetcher github
-                    :repo "ahungry/org-jira"
-                    :branch"master"))
+        idle-org-agenda
+        ;; Part of org layer as of 2019-06-28
+        ;; (org-jira
+        ;;  :location (recipe
+        ;;             :fetcher github
+        ;;             :repo "ahungry/org-jira"
+        ;;             :branch"master"))
         )
       "The list of Lisp packages required by the org-config layer.
 
@@ -75,6 +77,15 @@
 
     (defun org-config/init-ob-async ()
       (use-package ob-async
+        ;; Some configuration goes here, however nothing relating to company
+        ;; since this function may be called even if company is not installed!
+        ))
+
+    (defun org-config/init-idle-org-agenda ()
+      (use-package idle-org-agenda
+        :after org-agenda
+        :ensure t
+        :config (idle-org-agenda-mode)
         ;; Some configuration goes here, however nothing relating to company
         ;; since this function may be called even if company is not installed!
         ))

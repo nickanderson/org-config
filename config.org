@@ -16,12 +16,24 @@
   - [[#templates][Templates]]
     - [[#generic-meeting][Generic Meeting]]
     - [[#cfengine-customer-status-check-in][CFEngine Customer Status Check-in]]
+    - [[#cfengine-sales][CFEngine Sales]]
     - [[#cfengine-backlog-grooming][CFEngine Backlog Grooming]]
+    - [[#cfengine-planning][CFEngine Planning]]
+    - [[#cfengine-standup][CFEngine Standup]]
     - [[#unorganized][Unorganized]]
+      - [[#fix-myorg-daily-review-capture-template-yesterday-so-that-it-inserts-yesterdays-date-in-the-headline][Fix =my/org-daily-review-capture-template-yesterday= so that it inserts yesterdays date in the headline]]
   - [[#configure-capture][Configure Capture]]
+    - [[#daily-review][Daily Review]]
+    - [[#meetings][Meetings]]
+    - [[#capturing-under-currently-clocked-task][Capturing under currently clocked task]]
+    - [[#pipe-into-example-block-from-outside-org-mode][Pipe into EXAMPLE block from outside org-mode]]
+    - [[#selection-outside-emacs-into-currently-clocked-task][Selection (outside emacs) into currently clocked task]]
 - [[#babel-src-blocks][Babel (SRC blocks)]]
 - [[#exporting][Exporting]]
   - [[#publishing][Publishing]]
+- [[#google-calendar-sync][Google Calendar Sync]]
+  - [[#org-caldav][org-caldav]]
+  - [[#org-cal][org-cal]]
 - [[#agenda][Agenda]]
 - [[#clocking][Clocking]]
 - [[#downloading][Downloading]]
@@ -43,6 +55,17 @@ GPG can be used to automatically encrypt sections of text tagged with /*crypt*/.
   (setq org-tags-exclude-from-inheritance (quote ("crypt")))
   (setq org-crypt-key "9274E588E866A10B713C9CCD9EB3AD425D1CCC11")
 #+END_SRC
+
+Sometimes, when I am at home, I will ssh into my laptop and run emacs at the shell, or attach to a running server with emacsclient.
+I have had issues with gpg poping up a gui and then I can't decrupt from my ssh session. This resolves that for me.
+
+#+BEGIN_SRC elisp
+  (setq epa-pinentry-mode 'loopback)
+  ;; not working (pinentry-start)
+#+END_SRC
+
+#+RESULTS:
+: loopback
 
 ** For example  :crypt:
 -----BEGIN PGP MESSAGE-----
@@ -87,7 +110,33 @@ tJOSK/O5zYB2p4vGLcelSWN1+kkMgsgDwPv9
   ;; TODO Move this out from the org-layer, it's not org-specific.
   ;; Or make it specific to my org-files somehow https://emacs.stackexchange.com/a/3611
   (setq global-auto-revert-mode t)
+
+  ;; Disable line highlighting in terminal mode (makes it hard to see)
+  ;;(if display-graphic-p (global-hl-line-mode nil))
   ;; END org niceities
+#+END_SRC
+
+Variable pitch, and visual line mode for a better writing environment.
+https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+#+CAPTION: variable pitch and visual line mode
+#+BEGIN_SRC elisp
+  (custom-theme-set-faces
+   'user
+   '(org-block                 ((t (:inherit fixed-pitch))))
+   '(org-document-info         ((t (:foreground "dark orange"))))
+   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+   '(org-link                  ((t (:foreground "royal blue" :underline t))))
+   '(org-meta-line             ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-property-value        ((t (:inherit fixed-pitch))) t)
+   '(org-table                 ((t (:inherit fixed-pitch))) t) ;; Much improved, but right side of table still doesn't align
+   '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
+   '(org-code                  ((t (:inherit (shadow fixed-pitch)))))
+   '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+   '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
+   '(org-indent                ((t (:inherit (org-hide fixed-pitch))))))
+  (add-hook 'org-mode-hook 'variable-pitch-mode)
+  (add-hook 'org-mode-hook 'visual-line-mode)
 #+END_SRC
 
 * Journal
@@ -132,6 +181,9 @@ These need to be set earlier, like with the layer specification, for example:
 
 * Link abbreviations
 :PROPERTIES:
+:ID:       2d641838-b9f5-4f89-a228-0bd570dab880
+:END:
+:(PROPERTIES):
 :ID:       83e904da-0e44-4629-942f-c3a390e227fb
 :END:
   
@@ -168,7 +220,7 @@ different types of tasks that I work on.
 #+DOWNLOADED: file:///home/nickanderson/Pictures/Screenshots/2018-11-13-26-50.png @ 2018-11-02 13:28:14
 [[file:data/c6/f828da-99c2-4354-80ef-9ab57c9f702d/2018-11-13-26-50_2018-11-02_13-28-14.png]]
 ** Templates
-Tempalates can be external, probably it would be a good idea to try moving to
+Templates can be external, probably it would be a good idea to try moving to
 external template files instead of having huge templates in elisp. [[https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/duqzj0r/][This post
 from reddit.com/emacs]] shows an example using external templates
 
@@ -194,7 +246,13 @@ from reddit.com/emacs]] shows an example using external templates
 :END:
 #+BEGIN_SRC elisp
   (defvar my/org-meeting-template-customer-status "* %u Status Check-in
-  %^{CUSTOMER}pCREATED: %U
+  :PROPERTIES:
+  %^{CUSTOMER}p
+  :CREATED: %U
+  :MAIL_TO: Team CFEngine <cfengine@northern.tech>
+  :MAIL_SUBJECT: Meeting Notes: CFEngine Customer Sync
+  :MAIL_FROM: Nick Anderson <nick.anderson@northern.tech>
+  :END:
 
   %?
 
@@ -210,6 +268,30 @@ from reddit.com/emacs]] shows an example using external templates
   ,** Notes
 
   " "Meeting Template - Customer Status Check-in")
+#+END_SRC
+
+*** CFEngine Sales
+:PROPERTIES:
+:ID:       eefc7827-aa08-4c11-b68c-9ff0fa8a6331
+:END:
+#+BEGIN_SRC elisp
+  (defvar my/org-meeting-template-cfengine-sales "* %u CFEngine Sales 
+  %^{CUSTOMER}pCREATED: %U
+
+  %?
+
+  ,*Attendees:*
+    - Nick Anderson
+    -
+
+  ,** Info
+  - Platforms:
+  - Infrastructure Size:
+  - Key use cases:
+
+  ,** Notes
+
+  " "Meeting Template - CFEngine Sales")
 #+END_SRC
 
 *** CFEngine Backlog Grooming
@@ -228,23 +310,26 @@ Bi-weekly meeting to make sure we are ready to work on our planned tasks.
 
 #+BEGIN_SRC elisp
   (defvar my/org-meeting-template-grooming "* %u Meeting About CFEngine Grooming :internal_meeting:
-  CREATED: %U
+  :PROPERTIES:
+  :CREATED: %U
+  :END:
   %?
   ,*Agenda:*
+  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=34][CFEngine Epics]] (click the green/gray bars for summary)
+  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=26&view=planning.nodetail&epics=visible&issueLimit=100][Review Backlog]]
   - [[https://tracker.mender.io/issues/?filter=11300][Review New customer issues]]
-  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=34][Review Progress on CFEngine Epics]]
   - [[https://tracker.mender.io/issues/?filter=11205][Review Understanding of Next Bugs]]
-  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=11&view=planning&epics=visible][Review CFEngine PM Backlog]]
 
   ,** Notes
 
   " "Meeting Template - Grooming")
 #+END_SRC
 
-*** Unorganized
+*** CFEngine Planning
 :PROPERTIES:
-:ID:       78db44bb-8de4-4da9-bb90-fd6e235f1e26
+:ID:       113a8e92-53f7-4688-be4d-aa17cbed1512
 :END:
+
 #+BEGIN_SRC elisp
       ;; BEGIN Capture Templates
       ;; I picked up this neat trick from the Venerable Sacha Chua
@@ -255,25 +340,79 @@ Bi-weekly meeting to make sure we are ready to work on our planned tasks.
    - Demos
    - Review work in progress
    - Review newly registered issues
+   - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=26][CFEngine Kanban board]]
 
   ,** Demos
+  ,** WIP
+  ,** New Issues
 
 
   " "Meeting Template - Planning")
+#+END_SRC
 
-      (defvar my/org-meeting-template-standup "* %u CFEngine Standup  :internal_meeting:
-  CREATED: %U
+*** CFEngine Standup
+:PROPERTIES:
+:ID:       fdeefc35-4d8d-4b94-95d1-2126bbabfe3b
+:END:
 
+#+CAPTION: Capture template for CFEngine Standup Meeting
+#+BEGIN_SRC elisp
+  (defun my/northern-tech-org-files ()
+  "Return list of .org files containing information related to northern.tech. ( ~/org/refile.org, ~org/Work/northern.tech/, excluding temporary files (.# prefix)"
+
+  (cl-remove-if (lambda (k)
+                  ;; We remove temporary files (files containing .#) because it results in an
+                  ;; error trying trying to generate a clocktable from the resulting list as that
+                  ;; file appears and disappears.
+                  (string-match "\\.#" k))
+                (append
+                 ;; Captures and most recent history is in my refile.org
+                 '("~/org/refile.org")
+                 ;; And my northern.tech specific tree
+                 (directory-files-recursively "~/org/Work/northern.tech" "[^.]\\.*org$" nil))))
+
+  (defvar my/org-meeting-template-standup "* %u CFEngine  :internal_meeting:
+  :PROPERTIES:
+  :CREATED: %U
+  :MAIL_TO:  cfengine@northern.tech
+  :MAIL_SUBJECT: Standup Meeting: CFEngine
+  :MAIL_FROM: Nick Anderson <nick.anderson@northern.tech>
+  :END:
+
+  ,#+BEGIN_NOTE
+    Did you know, you can find a [[https://gitlab.com/nickanderson/northern.tech/blob/master/standup-meetings.org][history of standup meeting notes here]]?
+  ,#+END_NOTE
+  %?
   ,** Aleksei
-  ,** Igor
-  ,** Ole
-  ,** Vratislav
-  ,** Nils 
+  ,** Cody
   ,** Craig
+  ,** Igor
+  ,** Karl
   ,** Nick
 
-  " "Meeting Template - Standup")
+  ,#+begin_src elisp :results list
+    (org-ql-query
+      :select '(org-get-heading t t)
+      :where '(ts :from -1 :to today)
+      :from (my/northern-tech-org-files)
+       )
+  ,#+end_src
 
+  ,#+BEGIN: clocktable :stepskip0 t :fileskip0 t :maxlevel 2 :scope my/northern-tech-org-files :block yesterday :tags t :link nil :narrow 200!\n#+END
+
+  ,** Nils
+  ,** Ole
+  ,** Vratislav
+
+    " "Meeting Template - CFEngine Standup")
+#+END_SRC
+
+*** Unorganized
+:PROPERTIES:
+:ID:       78db44bb-8de4-4da9-bb90-fd6e235f1e26
+:END:
+
+#+BEGIN_SRC elisp
       (defvar my/org-meeting-template "* %u %^{Meeting About ...}   %^G
   CREATED: %U
 
@@ -296,18 +435,28 @@ Bi-weekly meeting to make sure we are ready to work on our planned tasks.
   CREATED: %U
   :PROPERTIES:
   :EMAIL: %(org-contacts-template-email)
-  :END:")
+  :END:\n")
 
 
-      (defvar my/org-respond-email-capture-template "** TODO [#B] Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n\n")
+      (defvar my/org-respond-email-capture-template "* TODO [#B] Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n#+BEGIN_QUOTE\n  %i\n#+END_QUOTE\n")
 
-      (defvar my/org-capture-support "** TODO [#A] [[zendesk:%^{ISSUE}]]: %^{DESCRIPTION} %^G\n\n%?\n")
-      (defvar my/org-capture-jira "** TODO [#B] [[jira:%^{ISSUE}]]: %^{DESCRIPTION} %^G\n\n%?\n")
-
-
-      (defvar my/org-daily-review-capture-template "* %u\n\n%?\n")
-
+      (defvar my/org-capture-support "* TODO [#A] [[zendesk:%^{ISSUE}]]: %^{DESCRIPTION} :Support:\n%^{CUSTOMER}p\n%?\n")
+      (defvar my/org-capture-jira "* TODO [#B] [[jira:%^{ISSUE}]]: %^{DESCRIPTION} %^G\n\n%?\n")
 #+END_SRC
+
+I like to generate a clocktable report for each day. I am not good about doing
+it at the end of each day, so I have one that targets yesterday that I tend to
+use when getting ready for my daily standup meeting.
+
+#+BEGIN_SRC elisp
+  (defvar my/org-daily-review-capture-template "* %u\n#+BEGIN: clocktable :stepskip0 t :fileskip0 t :maxlevel 2 :scope agenda :block today :tags t :link t :narrow 90!\n#+END%?\n")
+  (defvar my/org-daily-review-capture-template-yesterday "* %u\n#+BEGIN: clocktable :stepskip0 t :fileskip0 t :maxlevel 2 :scope agenda :block yesterday :tags t: link t :narrow 90!\n#+END%?\n")
+#+END_SRC
+
+**** TODO Fix =my/org-daily-review-capture-template-yesterday= so that it inserts yesterdays date in the headline
+
+I added this template with yesterday as the time block, so now it's quicker to
+deal with the clocktable, but I still have to manually adjust the header.
 ** Configure Capture
 :PROPERTIES:
 :ID:       8bbfa3e2-4ad1-4cb5-ac24-9c2deeef5f37
@@ -323,40 +472,167 @@ then resume the clock for whatever was being clocked before the capture.
         `(;; Note the backtick here, it's required so that the defvar based tempaltes will work!
           ;;http://comments.gmane.org/gmane.emacs.orgmode/106890
 
-          ("t" "To-do" entry (file+headline "~/org/refile.org" "Tasks")
-           "** TODO %^{Task Description}\nCreated From: %a\n%?\n\n" :clock-in t :clock-resume t :append t)
+          ("t" "To-do" entry (file "~/org/refile.org")
+           "* TODO %^{Task Description}\nCreated From: %a\n%?\n\n" :clock-in t :clock-resume t :append t)
 
-          ("s" "Support" entry (file+headline "~/org/refile.org" "Tasks")
+          ("s" "Support" entry (file "~/org/refile.org") 
            ,my/org-capture-support :clock-in t :clock-resume t :append t)
 
-          ("j" "Jira" entry (file+headline "~/org/refile.org" "Tasks")
+          ("j" "Jira" entry (file "~/org/refile.org")
            ,my/org-capture-jira :clock-in t :clock-resume t :append t)
 
           ("w" "Web site" entry
            (file "~/org/websites.org")
            "* %a :website:\n\n%U %?\n\n%:initial" :append t)
 
-          ("r" "Respond to Email" entry (file+headline "~/org/refile.org" "Tasks")
+          ("r" "Respond to Email" entry (file "~/org/refile.org")
            ,my/org-respond-email-capture-template :clock-in t :clock-resume t :append t)
 
           ("c" "Contact" entry (file "~/org/x-files.org") ,my/org-contact-capture-template :append t)
-          ("d" "Daily Review" entry (file "~/org/daily_reviews.org") ,my/org-daily-review-capture-template :clock-in t :clock-resume t :append t)
+#+END_SRC
 
+*** Daily Review
+:PROPERTIES:
+:ID:       215a8602-d5c5-401c-b143-aac05db134c4
+:END:
+
+#+BEGIN_SRC elisp
+          ("d" "Daily Review")
+          ("dt" "Today" entry (file "~/org/Work/northern.tech/daily_reviews.org") ,my/org-daily-review-capture-template :clock-in t :clock-resume t :append t)
+          ("dy" "Yesterday" entry (file "~/org/Work/northern.tech/daily_reviews.org") ,my/org-daily-review-capture-template-yesterday :clock-in t :clock-resume t :append t)
+#+END_SRC
+
+*** Meetings
+:PROPERTIES:
+:ID:       113ebbad-cf37-48d9-8bea-6245aa248a40
+:END:
+
+#+BEGIN_SRC elisp
           ("m" "Meetings" )
-          ("ms" "Meeting - Standup" entry (file "~/org/cfengine/meetings.org" )
+          ("ms" "Meeting - Standup" entry (file "~/org/Work/northern.tech/standup-meetings.org" )
            ,my/org-meeting-template-standup :clock-in t :clock-resume t :append t :empty-lines-after 1)
-          ("mc" "Meeting - Customer Status Check-in" entry (file "~/org/cfengine/meetings.org" )
+          ("mc" "Meeting - Customer Status Check-in" entry (file "~/org/Work/northern.tech/customer-status-meetings.org" )
            ,my/org-meeting-template-customer-status :clock-in t :clock-resume t :append t :empty-lines-after 1)
-          ("mg" "Meeting - Grooming" entry (file "~/org/cfengine/meetings.org" )
+          ("mg" "Meeting - Grooming" entry (file "~/org/Work/northern.tech/development-meetings.org" )
            ,my/org-meeting-template-grooming :clock-in t :clock-resume t :append t :empty-lines-after 1)
-          ("mp" "Meeting - Planning/Review" entry (file "~/org/cfengine/meetings.org" )
+          ("mp" "Meeting - Planning/Review" entry (file "~/org/Work/northern.tech/development-meetings.org" )
            ,my/org-meeting-template-planning :clock-in t :clock-resume t :append t :empty-lines-after 1)
-          ("mm" "Meeting - Generic" entry (file "~/org/cfengine/meetings.org" )
+          ("mm" "Meeting - Generic" entry (file "~/org/Work/northern.tech/meetings.org" )
            ,my/org-meeting-template-generic :clock-in t :clock-resume t :append t :empty-lines-after 1)
+          ("mS" "Meeting - CFEngine Sales" entry (file "~/org/Work/northern.tech/meetings.org" )
+           ,my/org-meeting-template-cfengine-sales :clock-in t :clock-resume t :append t :empty-lines-after 1)
           ))
   ;; END Capture templates
   ;; Use UUIDs to identify each speicifc entry
   (add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create)
+
+  ;; https://emacs.stackexchange.com/questions/26119/org-mode-adding-a-properties-drawer-to-a-capture-template
+  (defun add-property-with-date-created ()
+    "Add CREATED property to the current item in ISO-8601 format."
+    (interactive)
+    (org-set-property "CREATED" (format-time-string "%F")))
+
+  (add-hook 'org-capture-prepare-finalize-hook 'add-property-with-date-created)
+#+END_SRC
+*** Capturing under currently clocked task
+:PROPERTIES:
+:ID:       96443340-9441-4182-94b0-a6fe0dea2856
+:END:
+
+Here I use capturing to fill the desire for filling out templated information
+under my current heading. Note, this won't work unless your *already* clocking
+time.
+
+#+BEGIN_SRC elisp :tangle no
+  (add-to-list 'org-capture-templates
+               ("c" "Capture to currently clocked task" entry
+                (clock)
+                "* %^{Description}\nCreated From: %a\n%?\n\n" :clock-in t :clock-resume t :append t))
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle yes
+  (add-to-list 'org-capture-templates
+               `("C" "Capture contents to currently clocked task" plain
+                (clock)
+                "%i" :immediate-finish t :empty-lines 1))
+#+END_SRC
+
+*** Pipe into EXAMPLE block from outside org-mode
+:PROPERTIES:
+:ID:       4971af91-a668-416f-be92-572b1846e205
+:END:
+
+I want to be able to run a command (outside org-mode), and have the output
+captured into my currently clocked task. [[http://www.howardism.org/Technical/Emacs/capturing-content.html][I picked this from Howard Abrams]].
+
+#+BEGIN_SRC bash :tangle ~/bin/occ
+#!/usr/bin/env bash
+# Org capture to currently clocked task
+
+# With this capture template:
+# (add-to-list 'org-capture-templates
+#                `("C" "Capture contents to currently clocked task" plain
+#                 (clock)
+#                 "%i" :immediate-finish t :empty-lines 1))
+
+# Align the content in the example block appropriately
+CONTENT="#+BEGIN_EXAMPLE
+$(cat | sed 's/^/  /g')
+#+END_EXAMPLE
+"
+emacsclient -c -nw \
+  -e "(progn (org-capture-string \"$CONTENT\" \"C\") (delete-frame))"
+#+END_SRC
+
+Run ~something | occ~
+
+*** Selection (outside emacs) into currently clocked task
+:PROPERTIES:
+:ID:       bde69a2a-0782-4a07-9020-7bf83cdefa4c
+:END:
+
+#+BEGIN_SRC emacs-lisp
+  (defun ha/org-clipboard ()
+    "Return the contents of the clipboard in org-mode format."
+    (destructuring-bind (type contents) (ha/get-clipboard)
+      (with-temp-buffer
+        (insert contents)
+        (if (eq :html type)
+            (shell-command-on-region (point-min) (point-max) "pandoc -f html -t org" t t)
+          (ha/slack-to-markdown-buffer)
+          (shell-command-on-region (point-min) (point-max) "pandoc -f markdown -t org" t t))
+        (buffer-substring-no-properties (point-min) (point-max)))))
+
+  (defun ha/external-capture-to-org ()
+    "Calls `org-capture-string' on the contents of the Apple clipboard."
+    (interactive)
+    (org-capture-string (ha/org-clipboard) "C")
+    (ignore-errors
+      (delete-frame)))
+
+  (defun ha/get-clipboard ()
+    "Returns a list where the first entry is the content type,
+  either :html or :text, and the second is the clipboard contents."
+    (if (eq system-type 'darwin)
+        (ha/get-mac-clipboard)
+      (ha/get-linux-clipboard)))
+
+  (defun ha/get-linux-clipboard ()
+    "Return the clipbaard for a Unix-based system. See `ha/get-clipboard'."
+    (destructuring-bind (exit-code contents)
+        (shell-command-with-exit-code "xclip" "-o" "-t" "text/html")
+      (if (= 0 exit-code)
+          (list :html contents)
+        (list :text (shell-command-to-string "xclip -o")))))
+
+  (defun ha/get-mac-clipboard ()
+    "Returns a list where the first entry is the content type,
+  either :html or :text, and the second is the clipboard contents."
+    (destructuring-bind (exit-code contents)
+        (shell-command-with-exit-code "osascript" "-e" "the clipboard as \"HTML\"")
+      (if (= 0 exit-code)
+          (list :html (ha/convert-applescript-to-html contents))
+        (list :text (shell-command-to-string "osascript -e 'the clipboard'")))))
 #+END_SRC
 
 * Babel (SRC blocks)                                                 :ATTACH:
@@ -382,6 +658,12 @@ block.
 
 #+BEGIN_SRC elisp
   (setq org-src-tab-acts-natively t)
+  (defadvice yas-expand (around prefix-yas-expand)
+    (let ((my-previous-tab-state org-src-tab-acts-natively))
+      (setq org-src-tab-acts-natively nil)
+      ad-do-it
+      (setq org-src-tab-acts-natively my-previous-tab-state)))
+  (ad-activate 'yas-expand)
 #+END_SRC
 
 Here we configure the languages supported by SRC blocks.
@@ -391,8 +673,10 @@ Here we configure the languages supported by SRC blocks.
    'org-babel-load-languages
    '(
      (shell . t) ; Works for sh, shell, bash
-     ;; (python . t)
-     ;; (ruby . t)
+     (sql . t) ; PostgreSQL and more https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-sql.html
+     (cfengine3 . t) ; CFEngine
+     ;;(python . t)
+     ;;(ruby . t)
      ;; (ditaa . t)
      ;; (http . t)
      ;; (plantuml . t)
@@ -421,6 +705,32 @@ Here we configure the languages supported by SRC blocks.
 
 #+RESULTS:
 : R: Hello world
+
+* Checklists                                                       :noexport:
+SCHEDULED: <2019-03-24 Sun .+1d>
+:PROPERTIES:
+:RESET_CHECK_BOXES: t
+:LAST_REPEAT: [2019-03-23 Sat 11:22]
+:ID:       e696d771-662e-469d-95db-7c791d00cfe0
+:END:
+:LOGBOOK:
+- State "DONE"       from ""           [2019-03-23 Sat 11:22]
+- State "DONE"       from ""           [2019-03-23 Sat 11:22]
+- State "DONE"       from ""           [2019-03-22 Fri 20:11]
+- State "DONE"       from ""           [2019-03-22 Fri 20:04]
+:END:
+
+When working with recurring scheduled entreis, it can be useful to have a
+checklist and when the TODO state transitions to DONE, the checklist
+cautomatically clears.
+
+- [ ] Automatically clear all checkboxes when marked done
+
+#+BEGIN_SRC elisp
+  ;; BEGIN org-checklist configuration
+  (require `org-checklist)
+  ;; END org-checklist configuration
+#+END_SRC
 
 * Exporting
 :PROPERTIES:
@@ -497,6 +807,45 @@ Here we configure the languages supported by SRC blocks.
   ;; BEGIN org-agenda configuration
 #+END_SRC
 
+* Google Calendar Sync
+
+** org-caldav
+:PROPERTIES:
+:ID:       6f0ec602-9a7a-4d6c-afe0-4c17dd3b61a1
+:END:
+
+#+BEGIN_SRC elisp
+  ;; BEGIN org-caldav configuration
+  (setq plstore-cache-passphrase-for-symmetric-encryption t)
+
+  (setq org-caldav-url 'google)
+  (setq org-caldav-oauth2-client-id "814457985389-79faa1h6255gql14pfma00gsiocibl6i.apps.googleusercontent.com"
+        org-caldav-oauth2-client-secret "07DJJd1JMVJyDKNhjOw8qPYz")
+  (setq org-caldav-calendars
+        '((:calendar-id "nick.anderson@northern.tech" :files ("~/org/Work/northern.tech/calendar.org")
+                        :inbox "~/org/Work/northern.tech/calendar.org")))
+          ;; (:calendar-id "nick@cmdln.org"
+          ;;               :files ("~/org/personal/calendar.org")
+          ;;               :skip-conditions (regexp "soccer")
+          ;;               :inbox "~/org/personal/calendar.org")) )
+  ;; END org-caldav configuration
+#+END_SRC
+
+Some things aren't clear to me.
+- Must I set different client id and secrets for each account?
+- When I first configured I didn't have access in the google api, it gave me a
+  link to click and enable it.
+
+https://console.developers.google.com/apis/api/caldav.googleapis.com/overview?project=pacific-primer-187317
+
+** org-cal
+:PROPERTIES:
+:ID:       9a4b954a-2bc6-4e5e-892b-848edc2168f5
+:END:
+
+I considered using org-gcal, but I did not immediately see how to leverage
+=~/authinfo.gpg= for secure credential storage.
+
 * Agenda :ATTACH:
 :PROPERTIES:
 :ID:       fbd97b7f-c136-4069-95d3-42f4804d0f85
@@ -512,8 +861,8 @@ am doing, and my working set of org files is about 20M.
 #+END_SRC
 
 #+RESULTS:
-| 13M  | total |
-| 4.3M | total |
+| 4.2M | total |
+| 12K  | total |
 
 This helps me to both focus on todays stuff, and to reduce the time to build the
 agenda.
@@ -523,8 +872,27 @@ agenda.
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (setq org-agenda-files
-        '("~/org" "~/org/cfengine" "~/org/cfengine/customers" "~/.org-jira"))
+  (defun +org/opened-buffer-files ()
+    "Return the list of files currently opened in emacs"
+    (delq nil
+          (mapcar (lambda (x)
+                    (if (and (buffer-file-name x)
+                             (string-match "\\.org$"
+                                           (buffer-file-name x)))
+                        (buffer-file-name x)))
+                  (buffer-list))))
+
+  (setq org-refile-targets '((+org/opened-buffer-files :maxlevel . 9)))
+
+  ;;(setq org-refile-targets '( (directory-files-recursively "~/org/" "\.org$") )
+  (setq org-outline-path-complete-in-steps nil)
+  (setq org-refile-allow-creating-parent-nodes 'confirm)
+  ;; (setq org-agenda-files '( "~/org/refile.org"))
+  ;; https://stackoverflow.com/a/41969519/2854727
+  (setq org-agenda-files (my/northern-tech-org-files))
+  ;(directory-files-recursively "~/org/" "\.org$"))
+  ;'( (sa-find-org-file-recursively "~/org/" "org" ) "~/.org-jira" ))
+  ;'("~/org" "~/org/cfengine" "~/org/cfengine/customers" "~/.org-jira"))
   ;; It's hard to see them (at least with the default color). Also this is a
   ;; reccomended change to speed up the agenda (not that it's too slow for me).
   (setq org-agenda-dim-blocked-tasks nil)
@@ -538,11 +906,20 @@ example, here I see that I worked from 11:45-3:00 of non-stopped clocked time.
 #+DOWNLOADED: file:///home/nickanderson/Pictures/Screenshots/2018-10-22-05-30.png @ 2018-10-30 22:08:02
 [[file:data/fb/d97b7f-c136-4069-95d3-42f4804d0f85/2018-10-22-05-30_2018-10-30_22-08-02.png]]
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (when (configuration-layer/package-used-p 'org-timeline)
     (require 'org-timeline)
     (add-hook 'org-agenda-finalize-hook 'org-timeline-insert-timeline :append)
     )
+#+END_SRC
+
+# https://github.com/enisozgen/idle-org-agenda
+#+CAPTION: Configuring idle-org-agenda
+#+BEGIN_SRC elisp :tangle no
+(custom-set-variables
+ '(idle-org-agenda-interval 600) ;; 10 x 60 seconds
+ '(idle-org-agenda-key "cb")     ;; Choose your specific agenda
+ '(idle-org-agenda-mode t))
 #+END_SRC
 
 * Clocking
@@ -551,8 +928,11 @@ example, here I see that I worked from 11:45-3:00 of non-stopped clocked time.
 :END:
 #+BEGIN_SRC elisp
   ;; BEGIN clocking configuration
+  ;;(setq org-clock-continuously t) ; Start the clock time from the end of the previous clock fs
   (setq spaceline-org-clock-p t)
   (setq org-clock-idle-time 15)
+  (custom-set-variables
+   '(org-log-into-drawer t))
   (setq org-time-clocksum-format (quote (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
   ;; END clocking configuration
 #+END_SRC
