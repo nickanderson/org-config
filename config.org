@@ -13,6 +13,7 @@
 - [[#keywords][Keywords]]
 - [[#link-abbreviations][Link abbreviations]]
 - [[#capture][Capture]]
+  - [[#overview][Overview]]
   - [[#templates][Templates]]
     - [[#generic-meeting][Generic Meeting]]
     - [[#cfengine-customer-status-check-in][CFEngine Customer Status Check-in]]
@@ -20,19 +21,23 @@
     - [[#cfengine-backlog-grooming][CFEngine Backlog Grooming]]
     - [[#cfengine-planning][CFEngine Planning]]
     - [[#cfengine-standup][CFEngine Standup]]
+    - [[#the-agent-is-in][The Agent is in]]
+    - [[#security-team][Security Team]]
+    - [[#sre-team][SRE Team]]
     - [[#unorganized][Unorganized]]
       - [[#fix-myorg-daily-review-capture-template-yesterday-so-that-it-inserts-yesterdays-date-in-the-headline][Fix =my/org-daily-review-capture-template-yesterday= so that it inserts yesterdays date in the headline]]
   - [[#configure-capture][Configure Capture]]
     - [[#daily-review][Daily Review]]
     - [[#meetings][Meetings]]
     - [[#capturing-under-currently-clocked-task][Capturing under currently clocked task]]
+    - [[#capture-to-point][Capture to point]]
+    - [[#capture-new-entry-to-org-journal][Capture new entry to org-journal]]
     - [[#pipe-into-example-block-from-outside-org-mode][Pipe into EXAMPLE block from outside org-mode]]
     - [[#selection-outside-emacs-into-currently-clocked-task][Selection (outside emacs) into currently clocked task]]
 - [[#babel-src-blocks][Babel (SRC blocks)]]
 - [[#exporting][Exporting]]
   - [[#publishing][Publishing]]
 - [[#google-calendar-sync][Google Calendar Sync]]
-  - [[#org-caldav][org-caldav]]
   - [[#org-cal][org-cal]]
 - [[#agenda][Agenda]]
 - [[#clocking][Clocking]]
@@ -194,7 +199,8 @@ These need to be set earlier, like with the layer specification, for example:
       ;; Usage: [[zendesk:2753]] or [[redmine:7481][My text]]
       (setq org-link-abbrev-alist
             '(
-              ("cfe-func" . "https://docs.cfengine.com/docs/master/reference-functions-")
+              ("cfe-function" . "https://docs.cfengine.com/docs/master/reference-functions-%s.htm")
+              ("cfe-promise" . "https://docs.cfengine.com/docs/3.15/reference-promise-types-%s.htm")
               ("zendesk" . "https://cfengine.zendesk.com/agent/tickets/")
               ("redmine" . "https://dev.cfengine.com/issues/")
               ("core-pr" . "https://github.com/cfengine/core/pull/")
@@ -209,6 +215,7 @@ These need to be set earlier, like with the layer specification, for example:
 :ID:       c6f828da-99c2-4354-80ef-9ab57c9f702d
 :Attachments: 2018-11-13-26-27_2018-11-02_13-27-56.png 2018-11-13-26-50_2018-11-02_13-28-14.png
 :END:
+** Overview
 I use capture templates to help me get information for common things in a
 consistent way. I have capture templates for various types of meetings, and
 different types of tasks that I work on.
@@ -222,7 +229,7 @@ different types of tasks that I work on.
 ** Templates
 Templates can be external, probably it would be a good idea to try moving to
 external template files instead of having huge templates in elisp. [[https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/duqzj0r/][This post
-from reddit.com/emacs]] shows an example using external templates
+from reddit.com/emacs]] shows an example using external templates.
 
 *** Generic Meeting
 :PROPERTIES:
@@ -315,10 +322,10 @@ Bi-weekly meeting to make sure we are ready to work on our planned tasks.
   :END:
   %?
   ,*Agenda:*
-  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=34][CFEngine Epics]] (click the green/gray bars for summary)
-  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=26&view=planning.nodetail&epics=visible&issueLimit=100][Review Backlog]]
+  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=49&view=planning&selectedIssue=ENT-5265&epics=visible&issueLimit=100][CFEngine Epics]] (click the green/gray bars for summary)
   - [[https://tracker.mender.io/issues/?filter=11300][Review New customer issues]]
-  - [[https://tracker.mender.io/issues/?filter=11205][Review Understanding of Next Bugs]]
+  - [[https://tracker.mender.io/issues/?filter=11205][Review Understanding of Next auto-prioritized Bugs]]
+  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=26&view=planning.nodetail&epics=visible&issueLimit=100][Review Backlog]]
 
   ,** Notes
 
@@ -333,19 +340,83 @@ Bi-weekly meeting to make sure we are ready to work on our planned tasks.
 #+BEGIN_SRC elisp
       ;; BEGIN Capture Templates
       ;; I picked up this neat trick from the Venerable Sacha Chua
-      (defvar my/org-meeting-template-planning "* %u Meeting About CFEngine Planning   %^G
+      (defvar my/org-meeting-template-planning "* %u Meeting About CFEngine Planning
   CREATED: %U
 
+  - [[https://docs.google.com/document/d/1OY8RgkRuUghr9rImrx7kzeHJAPlZw9XY5Is1sGf5Rt0/edit?usp=drive_web&ouid=105225911714445244426][CFEngine SCRUM log]]
+
   ,*Agenda:*
-   - Demos
+   - Review
+     - Demos
    - Review work in progress
    - Review newly registered issues
-   - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=26][CFEngine Kanban board]]
 
-  ,** Demos
-  ,** WIP
-  ,** New Issues
+  ,** Review
+  ,*** Demos
+  ,*** Leftovers
 
+  ,#+CAPTION: Summary of story points remaining at end of sprint
+  |---------+------------------------|
+  |          | Story Points Remaining |
+  |----------+------------------------|
+  | UI       |                      0 |
+  | Core     |                      0 |
+  | Enablers |                      0 |
+  |----------+------------------------|
+  | *Total*  |                      0 |
+  ,#+TBLFM: @3$2=remote(core-leftovers,$total)::@2$2=remote(ui-leftovers,$total)::@4$2=remote(enablers-leftovers,$total)::@5$2=vsum(@2..@-1)
+
+  ,**** UI
+
+  ,#+CAPTION: UI related story points left at end of sprint
+  ,#+name: ui-leftovers
+  |----------+--------------+-------------------------------------------------------|
+  | Ticket   | SP Remaining | Comment                                               |
+  |----------+--------------+-------------------------------------------------------|
+  |          |              |                                                       |
+  |----------+--------------+-------------------------------------------------------|
+  | *Total*  |            0 |                                                       |
+  | ^        |        total |                                                       |
+  ,#+TBLFM: $total=vsum(@2..@-1)
+
+  ,**** Core
+
+  ,#+CAPTION: Core related story points left at end of sprint
+  ,#+name: core-leftovers
+  |----------+--------------+-------------------------------------------------------|
+  | Ticket   | SP Remaining | Comment                                               |
+  |----------+--------------+-------------------------------------------------------|
+  |          |              |                                                       |
+  |----------+--------------+-------------------------------------------------------|
+  | *Total*  |            0 |                                                       |
+  | ^        |        total |                                                       |
+  ,#+TBLFM: $total=vsum(@2..@-1)
+
+  ,**** Enablers
+
+  ,#+CAPTION: Enablers related story points left at end of sprint
+  ,#+name: enablers-leftovers
+  |----------+--------------+-------------------------------------------------------|
+  | Ticket   | SP Remaining | Comment                                               |
+  |----------+--------------+-------------------------------------------------------|
+  |          |              |                                                       |
+  |----------+--------------+-------------------------------------------------------|
+  | *Total*  |            0 |                                                       |
+  | ^        |        total |                                                       |
+  ,#+TBLFM: $total=vsum(@2..@-1)
+
+  ,** Planning
+  - [[https://tracker.mender.io/secure/Dashboard.jspa?selectPageId=11201][Sprint status]]
+  - [[https://docs.google.com/spreadsheets/d/12WHg2SlP6xZ5oG0Dnw2KsOrAkDjeJ4o92osLBr_kbPc/edit?usp=drive_web&ouid=105225911714445244426][CFEngine Capacity]]
+  - [[https://tracker.mender.io/issues/?filter=11205][Magical priority bug list]]
+  - [[https://tracker.mender.io/issues/?filter=11300][New Customer issues in last two weeks]]
+  - [[https://tracker.mender.io/issues/?filter=11211][Recently active customer related issues]]
+  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=49&view=detail][CFEngine SCRUM board]]
+  - [[https://tracker.mender.io/secure/RapidBoard.jspa?rapidView=26][CFEngine Kanban board]]
+
+
+  - New issues affecting customers
+  - New issues not necessarily affecting customers
 
   " "Meeting Template - Planning")
 #+END_SRC
@@ -371,7 +442,7 @@ Bi-weekly meeting to make sure we are ready to work on our planned tasks.
                  ;; And my northern.tech specific tree
                  (directory-files-recursively "~/org/Work/northern.tech" "[^.]\\.*org$" nil))))
 
-  (defvar my/org-meeting-template-standup "* %u CFEngine  :internal_meeting:
+  (defvar my/org-meeting-template-standup "* %u CFEngine Standup  :internal_meeting:
   :PROPERTIES:
   :CREATED: %U
   :MAIL_TO:  cfengine@northern.tech
@@ -384,10 +455,8 @@ Bi-weekly meeting to make sure we are ready to work on our planned tasks.
   ,#+END_NOTE
   %?
   ,** Aleksei
-  ,** Cody
   ,** Craig
   ,** Igor
-  ,** Karl
   ,** Nick
 
   ,#+begin_src elisp :results list
@@ -400,11 +469,83 @@ Bi-weekly meeting to make sure we are ready to work on our planned tasks.
 
   ,#+BEGIN: clocktable :stepskip0 t :fileskip0 t :maxlevel 2 :scope my/northern-tech-org-files :block yesterday :tags t :link nil :narrow 200!\n#+END
 
-  ,** Nils
   ,** Ole
   ,** Vratislav
 
     " "Meeting Template - CFEngine Standup")
+#+END_SRC
+
+*** The Agent is in
+:PROPERTIES:
+:ID:       e6a1c237-8588-4c05-9210-19dbedc52f2e
+:END:
+#+CAPTION: Capture template for The Agent is in Meeting
+#+BEGIN_SRC elisp
+  (defvar my/org-meeting-template-the-agent-is-in "* %u The Agent is in :meeting:
+  :PROPERTIES:
+  :CREATED: %U
+  :MAIL_TO:  people@northern.tech
+  :MAIL_SUBJECT: %u The Agent is in
+  :MAIL_FROM: Nick Anderson <nick.anderson@northern.tech>
+  :END:
+
+  ,#+BEGIN_NOTE
+    Did you know, you can find a [[https://gitlab.com/nickanderson/northern.tech/blob/master/CFEngine/the-agent-is-in.org][history of The Agent is in  meetings]]?
+  ,#+END_NOTE
+
+  ,** Topics
+
+    " "Meeting Template - The Agent is in")
+#+END_SRC
+
+*** Security Team
+:PROPERTIES:
+:ID:       e08e3a50-2fd7-4670-944e-7e72b90de350
+:END:
+#+CAPTION: Capture template for Security Team Meeting
+#+BEGIN_SRC elisp
+  (defvar my/org-meeting-template-security-team "* %u Security Team meeting notes
+  :PROPERTIES:
+  :CREATED: %U
+  :MAIL_TO:  people@northern.tech
+  :MAIL_SUBJECT: %u Security Team meating notes
+  :MAIL_FROM: Nick Anderson <nick.anderson@northern.tech>
+  :END:
+
+  ,** Resources
+  - [[https://docs.google.com/document/d/1KRwilxJlb8Qj4bkogn9ScTJf1MWh5thaAEEEFN-GoTw][Meeting notes and agenda]]
+  - [[https://docs.google.com/spreadsheets/d/19ka3VJ2BwjjL_iYBNUre1lss_p7oBxZpXV2jklr1etc/][Working document]]
+  - [[https://northern-tech.slack.com/archives/CT9ALP468][Slack channel]]
+  - [[https://groups.google.com/a/cfengine.com/forum/#!forum/security][Mailing List]]
+  - [[https://docs.google.com/document/d/1i1XYwjXkaaBn7irnIwFCNfgO4Gf7Ydt1Jk87ekBzWdg/][Original proposal]]
+  ,** [[https://docs.google.com/document/d/1KRwilxJlb8Qj4bkogn9ScTJf1MWh5thaAEEEFN-GoTw][Review]] (what happened in the last month)
+  ,**  [[https://docs.google.com/spreadsheets/d/19ka3VJ2BwjjL_iYBNUre1lss_p7oBxZpXV2jklr1etc/edit#gid=0][Proposals / ideas]]
+  Everyone should bring 1-3 ideas that they can present, we can discuss and add to spreadsheet
+  ,** Discussion / voting to narrow down which ideas to focus on
+  ,** Action points / who will do what
+    " "Meeting Template - Security Team")
+#+END_SRC
+
+*** SRE Team
+:PROPERTIES:
+:ID:       ba521309-39da-4dfb-9875-82804ff3f5fa
+:END:
+#+CAPTION: Capture template for Security Team Meeting
+#+BEGIN_SRC elisp
+  (defvar my/org-meeting-template-sre-internal-infra "* %u
+  :PROPERTIES:
+  :CREATED: %U
+  :MAIL_TO:  Northern.tech SRE <sre@northern.tech>
+  :MAIL_FROM: Nick Anderson <nick.anderson@northern.tech>
+  :MAIL_SUBJECT: Nick's notes from SRE Internal Infrastructure Meeting on %u
+  :END:
+
+  - [[https://docs.google.com/document/d/1neXnS16brsb7Jdn-Sg-f1Wyoyo_O5MJIAW7_FzTKpfY/edit][Google Doc: Team meeting agenda and minutes]]
+  - [[https://tracker.mender.io/issues/?jql=project%20in%20(%22Internal%20Infrastructure%22)%20ORDER%20BY%20updated%20DESC][Recent Infra activity]]
+
+  ,** Topics
+
+    " "Meeting Template - SRE Internal Infra")
 #+END_SRC
 
 *** Unorganized
@@ -473,12 +614,13 @@ then resume the clock for whatever was being clocked before the capture.
           ;;http://comments.gmane.org/gmane.emacs.orgmode/106890
 
           ("t" "To-do" entry (file "~/org/refile.org")
-           "* TODO %^{Task Description}\nCreated From: %a\n%?\n\n" :clock-in t :clock-resume t :append t)
+           "* TODO %^{Task Description}\n%?\n\n" :clock-in t :clock-resume t :append t)
 
-          ("s" "Support" entry (file "~/org/refile.org") 
+      
+          ("i" "Issue")
+          ("is" "Support" entry (file "~/org/refile.org") 
            ,my/org-capture-support :clock-in t :clock-resume t :append t)
-
-          ("j" "Jira" entry (file "~/org/refile.org")
+          ("ij" "Jira" entry (file "~/org/refile.org")
            ,my/org-capture-jira :clock-in t :clock-resume t :append t)
 
           ("w" "Web site" entry
@@ -509,8 +651,10 @@ then resume the clock for whatever was being clocked before the capture.
 
 #+BEGIN_SRC elisp
           ("m" "Meetings" )
-          ("ms" "Meeting - Standup" entry (file "~/org/Work/northern.tech/standup-meetings.org" )
+          ("md" "Meeting - Standup" entry (file "~/org/Work/northern.tech/standup-meetings.org" )
            ,my/org-meeting-template-standup :clock-in t :clock-resume t :append t :empty-lines-after 1)
+          ("ma" "Meeting - Agent is in" entry (file "~/org/Work/northern.tech/CFEngine/the-agent-is-in.org" )
+           ,my/org-meeting-template-the-agent-is-in :clock-in t :clock-resume t :append t :empty-lines-after 1)
           ("mc" "Meeting - Customer Status Check-in" entry (file "~/org/Work/northern.tech/customer-status-meetings.org" )
            ,my/org-meeting-template-customer-status :clock-in t :clock-resume t :append t :empty-lines-after 1)
           ("mg" "Meeting - Grooming" entry (file "~/org/Work/northern.tech/development-meetings.org" )
@@ -519,8 +663,13 @@ then resume the clock for whatever was being clocked before the capture.
            ,my/org-meeting-template-planning :clock-in t :clock-resume t :append t :empty-lines-after 1)
           ("mm" "Meeting - Generic" entry (file "~/org/Work/northern.tech/meetings.org" )
            ,my/org-meeting-template-generic :clock-in t :clock-resume t :append t :empty-lines-after 1)
-          ("mS" "Meeting - CFEngine Sales" entry (file "~/org/Work/northern.tech/meetings.org" )
+          ("ms" "More Meetings ")
+          ("msa" "Meeting - CFEngine Sales" entry (file "~/org/Work/northern.tech/meetings.org" )
            ,my/org-meeting-template-cfengine-sales :clock-in t :clock-resume t :append t :empty-lines-after 1)
+          ("msr" "Meeting - SRE Infrastructure" entry (file "~/org/Work/northern.tech/sre-infrastructure.org" )
+           ,my/org-meeting-template-sre-internal-infra :clock-in t :clock-resume t :append t :empty-lines-after 1)
+          ("mse" "Meeting - Security Team" entry (file "~/org/Work/northern.tech/security-team-meetings.org" )
+           ,my/org-meeting-template-security-team :clock-in t :clock-resume t :append t :empty-lines-after 1)
           ))
   ;; END Capture templates
   ;; Use UUIDs to identify each speicifc entry
@@ -530,7 +679,7 @@ then resume the clock for whatever was being clocked before the capture.
   (defun add-property-with-date-created ()
     "Add CREATED property to the current item in ISO-8601 format."
     (interactive)
-    (org-set-property "CREATED" (format-time-string "%F")))
+    (org-set-property "CREATED" (format-time-string "[%Y-%m-%d %a %H:%M]")))
 
   (add-hook 'org-capture-prepare-finalize-hook 'add-property-with-date-created)
 #+END_SRC
@@ -547,7 +696,7 @@ time.
   (add-to-list 'org-capture-templates
                ("c" "Capture to currently clocked task" entry
                 (clock)
-                "* %^{Description}\nCreated From: %a\n%?\n\n" :clock-in t :clock-resume t :append t))
+                "* %^{Description}\n%?\n\n" :clock-in t :clock-resume t :append t))
 #+END_SRC
 
 #+BEGIN_SRC elisp :tangle yes
@@ -555,6 +704,55 @@ time.
                `("C" "Capture contents to currently clocked task" plain
                 (clock)
                 "%i" :immediate-finish t :empty-lines 1))
+#+END_SRC
+
+*** Capture to point
+:PROPERTIES:
+:ID:       9a4c61ba-53fa-4751-b6b9-f2dfc478da42
+:END:
+https://emacs.stackexchange.com/questions/30595/how-to-org-capture-at-current-location
+
+#+BEGIN_SRC elisp :tangle no
+  (defun org-capture-at-point ()
+  "Insert an org capture template at point."
+  (interactive)
+  (org-capture 0))
+#+END_SRC
+
+Using entry type =entry= instead of =plain= may result in the entry being added to the end of the current headline /or/ the end of the file.
+
+#+BEGIN_SRC elisp :tangle yes
+  (add-to-list 'org-capture-templates
+               `("." "Capture to current location" plain
+                 (function (lambda nil (goto-char  (point))))
+                 "* %?\n%U\n" :clock-in t :clock-resume t :empty-lines 1))
+#+END_SRC
+
+#+RESULTS:
+| . | Capture to current location | plain | (function (lambda nil (goto-char (point)))) | * %? |
+
+*** Capture new entry to org-journal
+:PROPERTIES:
+:ID:       97d234e3-3947-4e90-89d9-077352fc00e0
+:END:
+
+#+CAPTION: Function to pick the correct journal file to capture a new entry to
+#+BEGIN_SRC elisp :tangle yes
+  (defun org-journal-find-location ()
+    ;; Open today's journal, but specify a non-nil prefix argument in order to
+    ;; inhibit inserting the heading; org-capture will insert the heading.
+    (org-journal-new-entry t)
+    ;; Position point on the journal's top-level heading so that org-capture
+    ;; will add the new entry as a child entry.
+    (goto-char (point-min)))
+#+END_SRC
+
+#+CAPTION: Add org-journal capture template
+#+BEGIN_SRC elisp :tangle yes
+(add-to-list 'org-capture-templates
+             `("j" "Journal entry" entry
+                (function org-journal-find-location)
+                "* %^{Title}\n%U\n%i%?"))
 #+END_SRC
 
 *** Pipe into EXAMPLE block from outside org-mode
@@ -634,6 +832,7 @@ Run ~something | occ~
           (list :html (ha/convert-applescript-to-html contents))
         (list :text (shell-command-to-string "osascript -e 'the clipboard'")))))
 #+END_SRC
+
 
 * Babel (SRC blocks)                                                 :ATTACH:
 :PROPERTIES:
@@ -809,35 +1008,6 @@ cautomatically clears.
 
 * Google Calendar Sync
 
-** org-caldav
-:PROPERTIES:
-:ID:       6f0ec602-9a7a-4d6c-afe0-4c17dd3b61a1
-:END:
-
-#+BEGIN_SRC elisp
-  ;; BEGIN org-caldav configuration
-  (setq plstore-cache-passphrase-for-symmetric-encryption t)
-
-  (setq org-caldav-url 'google)
-  (setq org-caldav-oauth2-client-id "814457985389-79faa1h6255gql14pfma00gsiocibl6i.apps.googleusercontent.com"
-        org-caldav-oauth2-client-secret "07DJJd1JMVJyDKNhjOw8qPYz")
-  (setq org-caldav-calendars
-        '((:calendar-id "nick.anderson@northern.tech" :files ("~/org/Work/northern.tech/calendar.org")
-                        :inbox "~/org/Work/northern.tech/calendar.org")))
-          ;; (:calendar-id "nick@cmdln.org"
-          ;;               :files ("~/org/personal/calendar.org")
-          ;;               :skip-conditions (regexp "soccer")
-          ;;               :inbox "~/org/personal/calendar.org")) )
-  ;; END org-caldav configuration
-#+END_SRC
-
-Some things aren't clear to me.
-- Must I set different client id and secrets for each account?
-- When I first configured I didn't have access in the google api, it gave me a
-  link to click and enable it.
-
-https://console.developers.google.com/apis/api/caldav.googleapis.com/overview?project=pacific-primer-187317
-
 ** org-cal
 :PROPERTIES:
 :ID:       9a4b954a-2bc6-4e5e-892b-848edc2168f5
@@ -879,10 +1049,10 @@ agenda.
                     (if (and (buffer-file-name x)
                              (string-match "\\.org$"
                                            (buffer-file-name x)))
-                        (buffer-file-name x)))
-                  (buffer-list))))
 
-  (setq org-refile-targets '((+org/opened-buffer-files :maxlevel . 9)))
+                  (buffer-list))))))
+
+  (setq org-refile-targets '((+org/opened-buffer-files :maxlevel . 3)))
 
   ;;(setq org-refile-targets '( (directory-files-recursively "~/org/" "\.org$") )
   (setq org-outline-path-complete-in-steps nil)
@@ -980,3 +1150,4 @@ a screenshot.
 #+BEGIN_SRC elisp
   )
 #+END_SRC
+
