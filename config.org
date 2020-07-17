@@ -1060,6 +1060,7 @@ agenda.
   ;; (setq org-agenda-files '( "~/org/refile.org"))
   ;; https://stackoverflow.com/a/41969519/2854727
   (setq org-agenda-files (my/northern-tech-org-files))
+  (add-to-list 'org-agenda-files "~/org/refile.org" 'prepend)
   ;(directory-files-recursively "~/org/" "\.org$"))
   ;'( (sa-find-org-file-recursively "~/org/" "org" ) "~/.org-jira" ))
   ;'("~/org" "~/org/cfengine" "~/org/cfengine/customers" "~/.org-jira"))
